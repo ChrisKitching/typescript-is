@@ -277,8 +277,6 @@ export function createAcceptingFunction(functionName: string) {
 }
 
 export function createConjunctionFunction(functionNames: string[], functionName: string, extraStatements?: ts.Statement[]) {
-    const conditionsIdentifier = ts.createIdentifier('conditions');
-    const conditionIdentifier = ts.createIdentifier('condition');
     return ts.createFunctionDeclaration(
         undefined,
         undefined,
@@ -290,46 +288,24 @@ export function createConjunctionFunction(functionNames: string[], functionName:
         ],
         undefined,
         ts.createBlock([
-            ts.createVariableStatement(
-                [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                [
-                    ts.createVariableDeclaration(
-                        conditionsIdentifier,
-                        undefined,
-                        ts.createArrayLiteral(
-                            functionNames.map((functionName) => ts.createIdentifier(functionName))
-                        )
-                    )
-                ]
-            ),
-            ts.createForOf(
-                undefined,
-                ts.createVariableDeclarationList(
-                    [ts.createVariableDeclaration(conditionIdentifier, undefined, undefined)],
-                    ts.NodeFlags.Const
-                ),
-                conditionsIdentifier,
-                ts.createBlock([
-                    ts.createIf(
-                        ts.createCall(
-                            conditionIdentifier,
-                            undefined,
-                            [objectIdentifier]
-                        ),
-                        ts.createReturn(ts.createTrue())
-                    )
-                ])
-            ),
             ...(extraStatements || []),
-            ts.createReturn(ts.createNull())
+            ts.createReturn(
+                createBinaries(
+                    functionNames.map((n) => ts.createCall(
+                        ts.createIdentifier(n),
+                        undefined,
+                        [objectIdentifier]
+                    )),
+                    ts.SyntaxKind.BarBarToken,
+                    ts.createTrue()
+                )
+            )
         ])
     );
 }
 
 export function createDisjunctionFunction(functionNames: string[], functionName: string) {
-    const conditionsIdentifier = ts.createIdentifier('conditions');
-    const conditionIdentifier = ts.createIdentifier('condition');
-    const errorIdentifier = ts.createIdentifier('error');
+    // This is actually a conjunction, but whatever.
     return ts.createFunctionDeclaration(
         undefined,
         undefined,
@@ -341,39 +317,17 @@ export function createDisjunctionFunction(functionNames: string[], functionName:
         ],
         undefined,
         ts.createBlock([
-            ts.createVariableStatement(
-                [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                [
-                    ts.createVariableDeclaration(
-                        conditionsIdentifier,
+            ts.createReturn(
+                createBinaries(
+                    functionNames.map((n) => ts.createCall(
+                        ts.createIdentifier(n),
                         undefined,
-                        ts.createArrayLiteral(
-                            functionNames.map((functionName) => ts.createIdentifier(functionName))
-                        )
-                    )
-                ]
-            ),
-            ts.createForOf(
-                undefined,
-                ts.createVariableDeclarationList(
-                    [ts.createVariableDeclaration(conditionIdentifier, undefined, undefined)],
-                    ts.NodeFlags.Const
-                ),
-                conditionsIdentifier,
-                ts.createBlock([
-                    ts.createIf(
-                        ts.createLogicalNot(
-                            ts.createCall(
-                                conditionIdentifier,
-                                undefined,
-                                [objectIdentifier]
-                            )
-                        ),
-                        ts.createReturn(ts.createFalse())
-                    )
-                ])
-            ),
-            ts.createReturn(ts.createTrue())
+                        [objectIdentifier]
+                    )),
+                    ts.SyntaxKind.AmpersandAmpersandToken,
+                    ts.createTrue()
+                )
+            )
         ])
     );
 }
