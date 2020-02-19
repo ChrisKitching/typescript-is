@@ -28,6 +28,7 @@ function visitRegularObjectType(type: ts.ObjectType, indexType: ts.Type, visitor
             );
             return VisitorUtils.createDisjunctionFunction(functionNames, name);
         } else {
+            // String literal union, presumably?
             const strings = sliceSet(stringType);
             if (strings.some((value) => propertiesInfo.every((propertyInfo) => propertyInfo.name !== value))) {
                 throw new Error('Indexed access on object type with an index that does not exist.');

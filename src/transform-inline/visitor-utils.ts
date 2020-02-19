@@ -449,40 +449,7 @@ export function isBigIntType(type: ts.Type) {
 }
 
 function createAssertionString(reason: string | ts.Expression): ts.Expression {
-    if (typeof reason === 'string') {
-        return createBinaries(
-            [
-                ts.createStringLiteral('validation failed at '),
-                ts.createCall(
-                    ts.createPropertyAccess(
-                        pathIdentifier,
-                        'join'
-                    ),
-                    undefined,
-                    [ts.createStringLiteral('.')]
-                ),
-                ts.createStringLiteral(`: ${reason}`)
-            ],
-            ts.SyntaxKind.PlusToken
-        );
-    } else {
-        return createBinaries(
-            [
-                ts.createStringLiteral('validation failed at '),
-                ts.createCall(
-                    ts.createPropertyAccess(
-                        pathIdentifier,
-                        'join'
-                    ),
-                    undefined,
-                    [ts.createStringLiteral('.')]
-                ),
-                ts.createStringLiteral(`: `),
-                reason
-            ],
-            ts.SyntaxKind.PlusToken
-        );
-    }
+    return ts.createStringLiteral('validation failed');
 }
 
 export function createErrorObject(reason: Reason): ts.Expression {
