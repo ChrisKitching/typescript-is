@@ -326,6 +326,25 @@ function tryGetTrivialBody(fn: ts.FunctionDeclaration): ts.Expression | undefine
     return undefined;
 }
 
+export function maybeInlinedCall(n: string, functions: Map<string, ts.FunctionDeclaration>) {
+    // If we have a function definition, have a go at inlining. Because this is completely
+    // reasonable :D
+    if (functions.has(n)) {
+        const defn = functions.get(n)!;
+        const body = tryGetTrivialBody(defn);
+        if (body !== undefined) {
+            return body;
+        }
+    }
+
+    // Fall back to a call expression.
+    return ts.createCall(
+        ts.createIdentifier(n),
+        undefined,
+        [objectIdentifier]
+    );
+}
+
 export function createDisjunctionFunction(functionNames: string[], functionName: string, functions: Map<string, ts.FunctionDeclaration>) {
     // This is actually a conjunction, but whatever.
     return ts.createFunctionDeclaration(
@@ -341,24 +360,7 @@ export function createDisjunctionFunction(functionNames: string[], functionName:
         ts.createBlock([
             ts.createReturn(
                 createBinaries(
-                    functionNames.map((n) => {
-                        // If we have a function definition, have a go at inlining. Because this is completely
-                        // reasonable :D
-                        if (functions.has(n)) {
-                            const defn = functions.get(n)!;
-                            const body = tryGetTrivialBody(defn);
-                            if (body !== undefined) {
-                                return body;
-                            }
-                        }
-
-                        // Fall back to a call expression.
-                        return ts.createCall(
-                            ts.createIdentifier(n),
-                            undefined,
-                            [objectIdentifier]
-                        );
-                    }),
+                    functionNames.map((n) => maybeInlinedCall(n, functions)),
                     ts.SyntaxKind.BarBarToken,
                     ts.createTrue()
                 )
