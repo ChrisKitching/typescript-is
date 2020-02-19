@@ -1,6 +1,6 @@
 {
-  "name": "typescript-is",
-  "version": "0.14.1",
+  "name": "@ckitching/typescript-is",
+  "version": "0.1.5",
   "engines": {
     "node": ">=6.14.4"
   },
@@ -10,7 +10,7 @@
     "transformer",
     "type"
   ],
-  "description": "TypeScript transformer that generates run-time type-checks.",
+  "description": "Fork of typescript-is to mitigate some performance issues at the cost of losing descriptive errors.",
   "main": "index.js",
   "files": [
     "lib/*",
@@ -24,14 +24,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/woutervh-/typescript-is.git"
+    "url": "git+https://github.com/ChrisKitching/typescript-is.git"
   },
-  "author": "Wouter van Heeswijk",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/woutervh-/typescript-is/issues"
+    "url": "https://github.com/ChrisKitching/typescript-is/issues"
   },
-  "homepage": "https://github.com/woutervh-/typescript-is#readme",
+  "homepage": "https://github.com/ChrisKitching/typescript-is#readme",
   "dependencies": {
     "nested-error-stacks": "^2",
     "tsutils": "^3.17.1"
