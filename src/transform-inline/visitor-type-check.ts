@@ -188,12 +188,10 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                 ),
                 // Validate the object properties.
                 ...propertyInfos.map((propertyInfo) => {
-                    if (propertyInfo.isSymbol) {
+                    if (propertyInfo.isSymbol || propertyInfo.isMethod) {
                         return ts.createEmptyStatement();
                     }
-                    const functionName = propertyInfo.isMethod
-                        ? VisitorUtils.getIgnoredTypeFunction(visitorContext)
-                        : visitType(propertyInfo.type!, visitorContext);
+                    const functionName = visitType(propertyInfo.type!, visitorContext);
 
                     const maybeNegate = (pred: boolean, x: any) => {
                         if (pred) {
