@@ -61,15 +61,13 @@ describe('assertEquals', () => {
         });
 
         it('should throw an error if objects without `foo` being a number are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertEquals<{ foo: number }>({}), expectedMessageRegExp);
-            assert.throws(() => assertEquals<{ foo: number }>({ bar: 0 }), expectedMessageRegExp);
+            assert.throws(() => assertEquals<{ foo: number }>({}));
+            assert.throws(() => assertEquals<{ foo: number }>({ bar: 0 }));
         });
 
         it('should throw an error if objects with `foo` being a number and with other properties are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertEquals<{ foo: number }>({ foo: 0, bar: 1 }), expectedMessageRegExp);
-            assert.throws(() => assertEquals<{ foo: number }>({ foo: 0, bar: 'value' }), expectedMessageRegExp);
+            assert.throws(() => assertEquals<{ foo: number }>({ foo: 0, bar: 1 }));
+            assert.throws(() => assertEquals<{ foo: number }>({ foo: 0, bar: 'value' }));
         });
     });
 });
@@ -88,15 +86,13 @@ describe('createAssertEquals', () => {
         });
 
         it('should throw an error if objects without `foo` being a number are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertObject({}), expectedMessageRegExp);
-            assert.throws(() => assertObject({ bar: 0 }), expectedMessageRegExp);
+            assert.throws(() => assertObject({}));
+            assert.throws(() => assertObject({ bar: 0 }));
         });
 
         it('should throw an error if objects with `foo` being a number and with other properties are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertObject({ foo: 0, bar: 1 }), expectedMessageRegExp);
-            assert.throws(() => assertObject({ foo: 0, bar: 'value' }), expectedMessageRegExp);
+            assert.throws(() => assertObject({ foo: 0, bar: 1 }));
+            assert.throws(() => assertObject({ foo: 0, bar: 'value' }));
         });
     });
 });

@@ -410,11 +410,7 @@ export function createAssertionFunction(failureCondition: ts.Expression, expecte
         ],
         undefined,
         ts.createBlock([
-            ts.createIf(
-                failureCondition,
-                ts.createReturn(createErrorObject(expected)),
-                ts.createReturn(ts.createNull())
-            )
+            ts.createReturn(failureCondition)
         ])
     );
 }

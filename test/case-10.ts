@@ -34,7 +34,6 @@ describe('createIs', () => {
 
 describe('createAssertType', () => {
     describe('createAssertType<number>', () => {
-        const expectedMessageRegExp = /validation failed/;
         const assertNumber = createAssertType<number>();
 
         it('should return a function', () => {
@@ -50,14 +49,14 @@ describe('createAssertType', () => {
         });
 
         it('should return a function that throws if non-numbers are passed to it', () => {
-            assert.throws(() => assertNumber(''), expectedMessageRegExp);
-            assert.throws(() => assertNumber('1'), expectedMessageRegExp);
-            assert.throws(() => assertNumber([]), expectedMessageRegExp);
-            assert.throws(() => assertNumber({}), expectedMessageRegExp);
-            assert.throws(() => assertNumber(true), expectedMessageRegExp);
-            assert.throws(() => assertNumber(false), expectedMessageRegExp);
-            assert.throws(() => assertNumber(null), expectedMessageRegExp);
-            assert.throws(() => assertNumber(undefined), expectedMessageRegExp);
+            assert.throws(() => assertNumber(''));
+            assert.throws(() => assertNumber('1'));
+            assert.throws(() => assertNumber([]));
+            assert.throws(() => assertNumber({}));
+            assert.throws(() => assertNumber(true));
+            assert.throws(() => assertNumber(false));
+            assert.throws(() => assertNumber(null));
+            assert.throws(() => assertNumber(undefined));
         });
     });
 });

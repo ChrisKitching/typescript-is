@@ -29,15 +29,14 @@ describe('@ValidateClass, @AssertType', () => {
         });
 
         it('should throw an error for non-numbers', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => instance.testMethod('' as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod('0' as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod('1' as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod(true as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod(false as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod({} as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod([] as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod(null as any), expectedMessageRegExp);
+            assert.throws(() => instance.testMethod('' as any));
+            assert.throws(() => instance.testMethod('0' as any));
+            assert.throws(() => instance.testMethod('1' as any));
+            assert.throws(() => instance.testMethod(true as any));
+            assert.throws(() => instance.testMethod(false as any));
+            assert.throws(() => instance.testMethod({} as any));
+            assert.throws(() => instance.testMethod([] as any));
+            assert.throws(() => instance.testMethod(null as any));
         });
     });
 
@@ -67,15 +66,14 @@ describe('@ValidateClass, @AssertType', () => {
         });
 
         it('should throw an error for non-numbers', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => instance.testMethod('' as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod('0' as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod('1' as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod(true as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod(false as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod({} as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod([] as any), expectedMessageRegExp);
-            assert.throws(() => instance.testMethod(null as any), expectedMessageRegExp);
+            assert.throws(() => instance.testMethod('' as any));
+            assert.throws(() => instance.testMethod('0' as any));
+            assert.throws(() => instance.testMethod('1' as any));
+            assert.throws(() => instance.testMethod(true as any));
+            assert.throws(() => instance.testMethod(false as any));
+            assert.throws(() => instance.testMethod({} as any));
+            assert.throws(() => instance.testMethod([] as any));
+            assert.throws(() => instance.testMethod(null as any));
         });
     });
 });

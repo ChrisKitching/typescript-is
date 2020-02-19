@@ -57,6 +57,9 @@
         "member-access": [
             false
         ],
+        "no-empty": [
+            false
+        ],
         "member-ordering": [
             true,
             {

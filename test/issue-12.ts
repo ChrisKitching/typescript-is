@@ -35,18 +35,12 @@ describe('is', () => {
 
     describe('assertType<ConfigInit>', () => {
         it('should throw an error when invalid objects are passed to it', () => {
-            const expectedMessageRegExp1 = /validation failed/;
-            const expectedMessageRegExp2 = /validation failed/;
-            const expectedMessageRegExp3 = /validation failed/;
-            const expectedMessageRegExp4 = /validation failed/;
-            const expectedMessageRegExp5 = /validation failed/;
-            const expectedMessageRegExp6 = /validation failed/;
-            assert.throws(() => assertType<ConfigInit>(null), expectedMessageRegExp1);
-            assert.throws(() => assertType<ConfigInit>({}), expectedMessageRegExp2);
-            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: 'foo' }), expectedMessageRegExp3);
-            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: [null] }), expectedMessageRegExp4);
-            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: [{}] }), expectedMessageRegExp5);
-            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: [{ folder: './foo', children: null }] }), expectedMessageRegExp6);
+            assert.throws(() => assertType<ConfigInit>(null));
+            assert.throws(() => assertType<ConfigInit>({}));
+            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: 'foo' }));
+            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: [null] }));
+            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: [{}] }));
+            assert.throws(() => assertType<ConfigInit>({ folder: '.', children: [{ folder: './foo', children: null }] }));
         });
     });
 

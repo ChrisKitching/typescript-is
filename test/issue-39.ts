@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { assertType, TypeGuardError } from '../index';
+import { assertType } from '../index';
 
 describe('assertType', () => {
     interface Bar {
@@ -20,59 +20,38 @@ describe('assertType', () => {
         it('should throw an error with the type of and path to the error', () => {
             try {
                 assertType<Foo>(null);
-            } catch (error) {
-                assert.deepStrictEqual(error instanceof TypeGuardError, true);
-                assert.deepStrictEqual(error.path, ['$']);
-                assert.deepStrictEqual(error.reason, { type: 'object' });
-            }
+                assert.fail('Failed to throw');
+            } catch (error) {}
 
             try {
                 assertType<Foo>({});
-            } catch (error) {
-                assert.deepStrictEqual(error instanceof TypeGuardError, true);
-                assert.deepStrictEqual(error.path, ['$']);
-                assert.deepStrictEqual(error.reason, { type: 'missing-property', property: 'foo' });
-            }
+                assert.fail('Failed to throw');
+            } catch (error) {}
 
             try {
                 assertType<Foo>({ foo: 123 });
-            } catch (error) {
-                assert.deepStrictEqual(error instanceof TypeGuardError, true);
-                assert.deepStrictEqual(error.path, ['$', 'foo']);
-                assert.deepStrictEqual(error.reason, { type: 'string' });
-            }
+                assert.fail('Failed to throw');
+            } catch (error) {}
 
             try {
                 assertType<Foo>({ foo: 'foo' });
-            } catch (error) {
-                assert.deepStrictEqual(error instanceof TypeGuardError, true);
-                assert.deepStrictEqual(error.path, ['$']);
-                assert.deepStrictEqual(error.reason, { type: 'missing-property', property: 'bar' });
-            }
+                assert.fail('Failed to throw');
+            } catch (error) {}
 
             try {
                 assertType<Foo>({ foo: 'foo', bar: null });
-            } catch (error) {
-                assert.deepStrictEqual(error instanceof TypeGuardError, true);
-                assert.deepStrictEqual(error.path, ['$', 'bar']);
-                assert.deepStrictEqual(error.reason, { type: 'object' });
-            }
+                assert.fail('Failed to throw');
+            } catch (error) {}
 
             try {
                 assertType<Foo>({ foo: 'foo', bar: {} });
-            } catch (error) {
-                assert.deepStrictEqual(error instanceof TypeGuardError, true);
-                assert.deepStrictEqual(error.path, ['$', 'bar']);
-                assert.deepStrictEqual(error.reason, { type: 'missing-property', property: 'values' });
-            }
+                assert.fail('Failed to throw');
+            } catch (error) {}
 
             try {
                 assertType<Foo>({ foo: 'foo', bar: { values: ['bar'], index: 'bar' } });
-            } catch (error) {
-                assert.deepStrictEqual(error instanceof TypeGuardError, true);
-                assert.deepStrictEqual(error.path, ['$', 'bar', 'index']);
-                assert.deepStrictEqual(error.reason, { type: 'number' });
-            }
+                assert.fail('Failed to throw');
+            } catch (error) {}
         });
     });
 });

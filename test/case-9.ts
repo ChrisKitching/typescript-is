@@ -3,8 +3,6 @@ import { assertType } from '../index';
 
 describe('assertType', () => {
     describe('assertType<number>', () => {
-        const expectedMessageRegExp = /validation failed/;
-
         it('should return the numbers passed to it', () => {
             assert.deepStrictEqual(assertType<number>(-1), -1);
             assert.deepStrictEqual(assertType<number>(0), 0);
@@ -14,14 +12,14 @@ describe('assertType', () => {
         });
 
         it('should throw an error if non-numbers are passed to it', () => {
-            assert.throws(() => assertType<number>(''), expectedMessageRegExp);
-            assert.throws(() => assertType<number>('1'), expectedMessageRegExp);
-            assert.throws(() => assertType<number>([]), expectedMessageRegExp);
-            assert.throws(() => assertType<number>({}), expectedMessageRegExp);
-            assert.throws(() => assertType<number>(true), expectedMessageRegExp);
-            assert.throws(() => assertType<number>(false), expectedMessageRegExp);
-            assert.throws(() => assertType<number>(null), expectedMessageRegExp);
-            assert.throws(() => assertType<number>(undefined), expectedMessageRegExp);
+            assert.throws(() => assertType<number>(''));
+            assert.throws(() => assertType<number>('1'));
+            assert.throws(() => assertType<number>([]));
+            assert.throws(() => assertType<number>({}));
+            assert.throws(() => assertType<number>(true));
+            assert.throws(() => assertType<number>(false));
+            assert.throws(() => assertType<number>(null));
+            assert.throws(() => assertType<number>(undefined));
         });
     });
 });

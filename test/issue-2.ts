@@ -13,23 +13,20 @@ describe('assertType', () => {
         });
 
         it('should throw an error if invalid objects are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ foo: string }>(0), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: string }>([]), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: string }>(null), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: string }>(true), expectedMessageRegExp);
+            assert.throws(() => assertType<{ foo: string }>(0));
+            assert.throws(() => assertType<{ foo: string }>([]));
+            assert.throws(() => assertType<{ foo: string }>(null));
+            assert.throws(() => assertType<{ foo: string }>(true));
         });
 
         it('should throw an error if objects without foo are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ foo: string }>({}), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: string }>({ bar: 'baz' }), expectedMessageRegExp);
+            assert.throws(() => assertType<{ foo: string }>({}));
+            assert.throws(() => assertType<{ foo: string }>({ bar: 'baz' }));
         });
 
         it('should throw an error if objects with foo not a string are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ foo: string }>({ foo: 0 }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: string }>({ foo: false }), expectedMessageRegExp);
+            assert.throws(() => assertType<{ foo: string }>({ foo: 0 }));
+            assert.throws(() => assertType<{ foo: string }>({ foo: false }));
         });
     });
 
@@ -43,26 +40,22 @@ describe('assertType', () => {
         });
 
         it('should throw an error if objects without foo are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ foo: string }>({}), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: string }>({ bar: 'baz' }), expectedMessageRegExp);
+            assert.throws(() => assertType<{ foo: string }>({}));
+            assert.throws(() => assertType<{ foo: string }>({ bar: 'baz' }));
         });
 
         it('should throw an error if invalid objects are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ foo: number[] }>(0), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: number[] }>(null), expectedMessageRegExp);
-            assert.throws(() => assertType<{ foo: number[] }>(true), expectedMessageRegExp);
+            assert.throws(() => assertType<{ foo: number[] }>(0));
+            assert.throws(() => assertType<{ foo: number[] }>(null));
+            assert.throws(() => assertType<{ foo: number[] }>(true));
         });
 
         it('should throw an error if objects where foo is not an array of numbers are passed to it', () => {
-            const expectedMessageRegExp1 = /validation failed/;
-            const expectedMessageRegExp2 = /validation failed/;
-            assert.throws(() => assertType<{ foo: number[] }>({ foo: [0, '0'] }), expectedMessageRegExp1);
-            assert.throws(() => assertType<{ foo: number[] }>({ foo: ['1'] }), expectedMessageRegExp2);
-            assert.throws(() => assertType<{ foo: number[] }>({ foo: [{}] }), expectedMessageRegExp2);
-            assert.throws(() => assertType<{ foo: number[] }>({ foo: [[]] }), expectedMessageRegExp2);
-            assert.throws(() => assertType<{ foo: number[] }>({ foo: [null] }), expectedMessageRegExp2);
+            assert.throws(() => assertType<{ foo: number[] }>({ foo: [0, '0'] }));
+            assert.throws(() => assertType<{ foo: number[] }>({ foo: ['1'] }));
+            assert.throws(() => assertType<{ foo: number[] }>({ foo: [{}] }));
+            assert.throws(() => assertType<{ foo: number[] }>({ foo: [[]] }));
+            assert.throws(() => assertType<{ foo: number[] }>({ foo: [null] }));
         });
     });
 
@@ -77,40 +70,35 @@ describe('assertType', () => {
         });
 
         it('should throw an error if nested objects with foo not \'bar\' or \'baz\' are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: 'qux' } }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: 0 } }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: [] } }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: {} } }), expectedMessageRegExp);
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: 'qux' } }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: 0 } }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: [] } }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foo: {} } }));
         });
 
         it('should throw an error if nested objects without foo are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: {} }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foh: 'bar' } }), expectedMessageRegExp);
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: {} }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: { foh: 'bar' } }));
         });
 
         it('should throw an error if nested properties that are not objects are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: 0 }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: true }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: null }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nested: [] }), expectedMessageRegExp);
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: 0 }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: true }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: null }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nested: [] }));
         });
 
         it('should throw an error if objects without nested are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ nested: Nested }>({ nisted: { foo: 'bar' } }), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>({ nisted: { foh: 'baz' } }), expectedMessageRegExp);
+            assert.throws(() => assertType<{ nested: Nested }>({ nisted: { foo: 'bar' } }));
+            assert.throws(() => assertType<{ nested: Nested }>({ nisted: { foh: 'baz' } }));
         });
 
         it('should throw an error if other objects are passed to it', () => {
-            const expectedMessageRegExp = /validation failed/;
-            assert.throws(() => assertType<{ nested: Nested }>('0'), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>(1), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>([]), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>(null), expectedMessageRegExp);
-            assert.throws(() => assertType<{ nested: Nested }>(false), expectedMessageRegExp);
+            assert.throws(() => assertType<{ nested: Nested }>('0'));
+            assert.throws(() => assertType<{ nested: Nested }>(1));
+            assert.throws(() => assertType<{ nested: Nested }>([]));
+            assert.throws(() => assertType<{ nested: Nested }>(null));
+            assert.throws(() => assertType<{ nested: Nested }>(false));
         });
     });
 
@@ -122,12 +110,10 @@ describe('assertType', () => {
         });
 
         it('should throw an error if objects with non-boolen values are passed to it', () => {
-            const expectedMessageRegExp1 = /validation failed/;
-            const expectedMessageRegExp2 = /validation failed/;
-            assert.throws(() => assertType<{ [Key: string]: boolean }>({ foo: 0 }), expectedMessageRegExp1);
-            assert.throws(() => assertType<{ [Key: string]: boolean }>({ bar: 'foo' }), expectedMessageRegExp2);
-            assert.throws(() => assertType<{ [Key: string]: boolean }>({ bar: [] }), expectedMessageRegExp2);
-            assert.throws(() => assertType<{ [Key: string]: boolean }>({ bar: null }), expectedMessageRegExp2);
+            assert.throws(() => assertType<{ [Key: string]: boolean }>({ foo: 0 }));
+            assert.throws(() => assertType<{ [Key: string]: boolean }>({ bar: 'foo' }));
+            assert.throws(() => assertType<{ [Key: string]: boolean }>({ bar: [] }));
+            assert.throws(() => assertType<{ [Key: string]: boolean }>({ bar: null }));
         });
     });
 });
