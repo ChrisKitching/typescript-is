@@ -16,7 +16,6 @@ function createArrowFunction(type: ts.Type, optional: boolean, partialVisitorCon
             : visitType(type, visitorContext)
         );
 
-    const errorIdentifier = ts.createIdentifier('error');
     const declarations = sliceMapValues(functionMap);
 
     return ts.createArrowFunction(
@@ -36,11 +35,7 @@ function createArrowFunction(type: ts.Type, optional: boolean, partialVisitorCon
         undefined,
         ts.createBlock([
             ...declarations,
-            ts.createVariableStatement(
-                [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                [ts.createVariableDeclaration(errorIdentifier, undefined, ts.createCall(ts.createIdentifier(functionName), undefined, [VisitorUtils.objectIdentifier]))]
-            ),
-            ts.createReturn(errorIdentifier)
+            ts.createReturn(ts.createCall(ts.createIdentifier(functionName), undefined, [VisitorUtils.objectIdentifier]))
         ])
     );
 }

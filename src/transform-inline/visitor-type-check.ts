@@ -14,7 +14,6 @@ function visitTupleObjectType(type: ts.TupleType, visitorContext: VisitorContext
         const functionNames = type.typeArguments ?
             type.typeArguments.map((type) => visitType(type, visitorContext))
             : [];
-        const errorIdentifier = ts.createIdentifier('error');
 
         const maxLength = functionNames.length;
         let minLength = functionNames.length;
@@ -70,23 +69,13 @@ function visitTupleObjectType(type: ts.TupleType, visitorContext: VisitorContext
                 ),
                 ...functionNames.map((functionName, index) =>
                     ts.createBlock([
-                        ts.createVariableStatement(
-                            [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                            [
-                                ts.createVariableDeclaration(
-                                    errorIdentifier,
-                                    undefined,
-                                    ts.createCall(
-                                        ts.createIdentifier(functionName),
-                                        undefined,
-                                        [ts.createElementAccess(VisitorUtils.objectIdentifier, index)]
-                                    )
-                                )
-                            ]
-                        ),
                         ts.createIf(
-                            errorIdentifier,
-                            ts.createReturn(errorIdentifier)
+                            ts.createCall(
+                                ts.createIdentifier(functionName),
+                                undefined,
+                                [ts.createElementAccess(VisitorUtils.objectIdentifier, index)]
+                            ),
+                            ts.createReturn(ts.createTrue())
                         )
                     ])
                 ),
@@ -105,7 +94,6 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
         }
         const functionName = visitType(numberIndexType, visitorContext);
         const indexIdentifier = ts.createIdentifier('i');
-        const errorIdentifier = ts.createIdentifier('error');
         return ts.createFunctionDeclaration(
             undefined,
             undefined,
@@ -139,23 +127,13 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
                     ),
                     ts.createPostfixIncrement(indexIdentifier),
                     ts.createBlock([
-                        ts.createVariableStatement(
-                            [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                            [
-                                ts.createVariableDeclaration(
-                                    errorIdentifier,
-                                    undefined,
-                                    ts.createCall(
-                                        ts.createIdentifier(functionName),
-                                        undefined,
-                                        [ts.createElementAccess(VisitorUtils.objectIdentifier, indexIdentifier)]
-                                    )
-                                )
-                            ]
-                        ),
                         ts.createIf(
-                            errorIdentifier,
-                            ts.createReturn(errorIdentifier)
+                            ts.createCall(
+                                ts.createIdentifier(functionName),
+                                undefined,
+                                [ts.createElementAccess(VisitorUtils.objectIdentifier, indexIdentifier)]
+                            ),
+                            ts.createReturn(ts.createTrue())
                         )
                     ])
                 ),
@@ -172,7 +150,6 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
         const stringIndexType = visitorContext.checker.getIndexTypeOfType(type, ts.IndexKind.String);
         const stringIndexFunctionName = stringIndexType ? visitType(stringIndexType, visitorContext) : undefined;
         const keyIdentifier = ts.createIdentifier('key');
-        const errorIdentifier = ts.createIdentifier('error');
         return ts.createFunctionDeclaration(
             undefined,
             undefined,
@@ -253,23 +230,13 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                                 ),
                                 ts.createCall(ts.createPropertyAccess(ts.createIdentifier('Object'), 'keys'), undefined, [VisitorUtils.objectIdentifier]),
                                 ts.createBlock([
-                                    ts.createVariableStatement(
-                                        [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                                        [
-                                            ts.createVariableDeclaration(
-                                                errorIdentifier,
-                                                undefined,
-                                                ts.createCall(
-                                                    ts.createIdentifier(stringIndexFunctionName),
-                                                    undefined,
-                                                    [ts.createElementAccess(VisitorUtils.objectIdentifier, keyIdentifier)]
-                                                )
-                                            )
-                                        ]
-                                    ),
                                     ts.createIf(
-                                        errorIdentifier,
-                                        ts.createReturn(errorIdentifier)
+                                        ts.createCall(
+                                            ts.createIdentifier(stringIndexFunctionName),
+                                            undefined,
+                                            [ts.createElementAccess(VisitorUtils.objectIdentifier, keyIdentifier)]
+                                        ),
+                                        ts.createReturn(ts.createTrue())
                                     )
                                 ])
                             )
@@ -563,7 +530,6 @@ export function visitUndefinedOrType(type: ts.Type, visitorContext: VisitorConte
     const functionName = visitType(type, visitorContext);
     const name = `optional_${functionName}`;
     return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
-        const errorIdentifier = ts.createIdentifier('error');
         return ts.createFunctionDeclaration(
             undefined,
             undefined,
@@ -581,23 +547,13 @@ export function visitUndefinedOrType(type: ts.Type, visitorContext: VisitorConte
                         ts.createIdentifier('undefined')
                     ),
                     ts.createBlock([
-                        ts.createVariableStatement(
-                            [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                            [
-                                ts.createVariableDeclaration(
-                                    errorIdentifier,
-                                    undefined,
-                                    ts.createCall(
-                                        ts.createIdentifier(functionName),
-                                        undefined,
-                                        [VisitorUtils.objectIdentifier]
-                                    )
-                                )
-                            ]
-                        ),
                         ts.createIf(
-                            errorIdentifier,
-                            ts.createReturn(errorIdentifier)
+                            ts.createCall(
+                                ts.createIdentifier(functionName),
+                                undefined,
+                                [VisitorUtils.objectIdentifier]
+                            ),
+                            ts.createReturn(ts.createTrue())
                         )
                     ])
                 ),
