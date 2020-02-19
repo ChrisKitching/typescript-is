@@ -205,6 +205,7 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                     ),
                     ts.createReturn(ts.createTrue())
                 ),
+                // Validate the object properties.
                 ...propertyInfos.map((propertyInfo) => {
                     if (propertyInfo.isSymbol) {
                         return ts.createEmptyStatement();
@@ -212,6 +213,7 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                     const functionName = propertyInfo.isMethod
                         ? VisitorUtils.getIgnoredTypeFunction(visitorContext)
                         : visitType(propertyInfo.type!, visitorContext);
+
                     return ts.createBlock([
                         ts.createIf(
                             ts.createBinary(
@@ -220,23 +222,13 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                                 VisitorUtils.objectIdentifier
                             ),
                             ts.createBlock([
-                                ts.createVariableStatement(
-                                    [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                                    [
-                                        ts.createVariableDeclaration(
-                                            errorIdentifier,
-                                            undefined,
-                                            ts.createCall(
-                                                ts.createIdentifier(functionName),
-                                                undefined,
-                                                [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
-                                            )
-                                        )
-                                    ]
-                                ),
                                 ts.createIf(
-                                    errorIdentifier,
-                                    ts.createReturn(errorIdentifier)
+                                    ts.createCall(
+                                        ts.createIdentifier(functionName),
+                                        undefined,
+                                        [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
+                                    ),
+                                    ts.createReturn(ts.createTrue())
                                 )
                             ]),
                             propertyInfo.optional
