@@ -66,7 +66,7 @@ function visitTupleObjectType(type: ts.TupleType, visitorContext: VisitorContext
                         ],
                         ts.SyntaxKind.BarBarToken
                     ),
-                    ts.createReturn(VisitorUtils.createErrorObject({ type: 'tuple', minLength, maxLength }))
+                    ts.createReturn(ts.createTrue())
                 ),
                 ...functionNames.map((functionName, index) =>
                     ts.createBlock([
@@ -139,7 +139,7 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
                             [VisitorUtils.objectIdentifier]
                         )
                     ),
-                    ts.createReturn(VisitorUtils.createErrorObject({ type: 'array' }))
+                    ts.createReturn(ts.createTrue())
                 ),
                 ts.createFor(
                     ts.createVariableDeclarationList(
@@ -240,7 +240,7 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                         ],
                         ts.SyntaxKind.BarBarToken
                     ),
-                    ts.createReturn(VisitorUtils.createErrorObject({ type: 'object' }))
+                    ts.createReturn(ts.createTrue())
                 ),
                 ...propertyInfos.map((propertyInfo) => {
                     if (propertyInfo.isSymbol) {
@@ -292,7 +292,7 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                             ]),
                             propertyInfo.optional
                                 ? undefined
-                                : ts.createReturn(VisitorUtils.createErrorObject({ type: 'missing-property', property: propertyInfo.name }))
+                                : ts.createReturn(ts.createTrue())
                         )
                     ]);
                 }),

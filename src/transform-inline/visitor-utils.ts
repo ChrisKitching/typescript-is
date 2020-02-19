@@ -229,7 +229,7 @@ export function getNeverFunction(visitorContext: VisitorContext) {
             ],
             undefined,
             ts.createBlock([
-                ts.createReturn(createErrorObject({ type: 'never' }))
+                ts.createReturn(ts.createTrue())
             ])
         );
     });
@@ -393,7 +393,7 @@ export function createDisjunctionFunction(functionNames: string[], functionName:
                     )
                 ])
             ),
-            ts.createReturn(createErrorObject({ type: 'union' }))
+            ts.createReturn(ts.createTrue())
         ])
     );
 }
@@ -430,7 +430,7 @@ export function createSuperfluousPropertiesLoop(propertyNames: string[]) {
                     ts.SyntaxKind.AmpersandAmpersandToken,
                     ts.createTrue()
                 ),
-                ts.createReturn(createErrorObject({ type: 'superfluous-property' }))
+                ts.createReturn(ts.createTrue())
             )
         ])
     );
@@ -441,91 +441,5 @@ export function isBigIntType(type: ts.Type) {
         return (ts.TypeFlags as any).BigInt & type.flags;
     } else {
         return false;
-    }
-}
-
-function createAssertionString(reason: string | ts.Expression): ts.Expression {
-    return ts.createStringLiteral('validation failed');
-}
-
-export function createErrorObject(reason: Reason): ts.Expression {
-    return ts.createObjectLiteral([
-        ts.createPropertyAssignment('message', createErrorMessage(reason)),
-        ts.createPropertyAssignment('path', ts.createCall(ts.createPropertyAccess(pathIdentifier, 'slice'), undefined, undefined)),
-        ts.createPropertyAssignment('reason', serializeObjectToExpression(reason))
-    ]);
-}
-
-function serializeObjectToExpression(object: unknown): ts.Expression {
-    if (typeof object === 'string') {
-        return ts.createStringLiteral(object);
-    } else if (typeof object === 'number') {
-        return ts.createNumericLiteral(object.toString());
-    } else if (typeof object === 'boolean') {
-        return object ? ts.createTrue() : ts.createFalse();
-    } else if (typeof object === 'bigint') {
-        return ts.createBigIntLiteral(object.toString());
-    } else if (typeof object === 'undefined') {
-        return ts.createIdentifier('undefined');
-    } else if (typeof object === 'object') {
-        if (object === null) {
-            return ts.createNull();
-        } else if (Array.isArray(object)) {
-            return ts.createArrayLiteral(object.map((item) => serializeObjectToExpression(item)));
-        } else {
-            return ts.createObjectLiteral(Object.keys(object).map((key) => {
-                const value = (object as { [Key: string]: unknown })[key];
-                return ts.createPropertyAssignment(key, serializeObjectToExpression(value));
-            }));
-        }
-    }
-    throw new Error('Cannot serialize object to expression.');
-}
-
-function createErrorMessage(reason: Reason): ts.Expression {
-    switch (reason.type) {
-        case 'tuple':
-            return createAssertionString(`expected an array with length ${reason.minLength}-${reason.maxLength}`);
-        case 'array':
-            return createAssertionString('expected an array');
-        case 'object':
-            return createAssertionString('expected an object');
-        case 'missing-property':
-            return createAssertionString(`expected '${reason.property}' in object`);
-        case 'superfluous-property':
-            return createAssertionString(createBinaries(
-                [
-                    ts.createStringLiteral(`superfluous property '`),
-                    keyIdentifier,
-                    ts.createStringLiteral(`' in object`)
-                ],
-                ts.SyntaxKind.PlusToken
-            ));
-        case 'never':
-            return createAssertionString('type is never');
-        case 'union':
-            return createAssertionString('there are no valid alternatives');
-        case 'string':
-            return createAssertionString('expected a string');
-        case 'boolean':
-            return createAssertionString('expected a boolean');
-        case 'big-int':
-            return createAssertionString('expected a bigint');
-        case 'number':
-            return createAssertionString('expected a number');
-        case 'undefined':
-            return createAssertionString('expected undefined');
-        case 'null':
-            return createAssertionString('expected null');
-        case 'object-keyof':
-            return createAssertionString(`expected ${reason.properties.map((property) => `'${property}'`).join('|')}`);
-        case 'string-literal':
-            return createAssertionString(`expected string '${reason.value}'`);
-        case 'number-literal':
-            return createAssertionString(`expected number '${reason.value}'`);
-        case 'boolean-literal':
-            return createAssertionString(`expected ${reason.value ? 'true' : 'false'}`);
-        case 'non-primitive':
-            return createAssertionString('expected a non-primitive');
     }
 }
