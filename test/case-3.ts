@@ -1,6 +1,20 @@
 import * as assert from 'assert';
 import { is } from '../index';
 
+export const enum MyEnum {
+    Alpha = 'alpha',
+    Bravo = 'bravo',
+    Charlie = 'charlie',
+    Delta = 'delta',
+    Echo = 'echo',
+    Foxtrot = 'foxtrot',
+    Golf = 'golf',
+    Hotel = 'hotel',
+    India = 'india',
+    Juliet = 'juliet'
+}
+
+
 describe('is', () => {
     describe('is<number | boolean>', () => {
         it('should return true for numbers', () => {
@@ -55,6 +69,13 @@ describe('is', () => {
             assert.deepStrictEqual(is<'a' | 'b' | 0 | 1>(undefined), false);
             assert.deepStrictEqual(is<'a' | 'b' | 0 | 1>({}), false);
             assert.deepStrictEqual(is<'a' | 'b' | 0 | 1>([]), false);
+        });
+    });
+
+    describe('Big enum', () => {
+        it('should not be shit', () => {
+            assert.deepStrictEqual(is<MyEnum>(42), false);
+            assert.deepStrictEqual(is<MyEnum>('golf'), true);
         });
     });
 });

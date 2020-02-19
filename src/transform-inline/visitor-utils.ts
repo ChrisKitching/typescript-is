@@ -2,6 +2,7 @@ import * as ts from 'typescript';
 import * as tsutils from 'tsutils/typeguard/3.0';
 import { VisitorContext } from './visitor-context';
 import { Reason } from '../../index';
+import {ReturnStatement, SyntaxKind} from 'typescript';
 
 export const objectIdentifier = ts.createIdentifier('object');
 const keyIdentifier = ts.createIdentifier('key');
@@ -304,7 +305,28 @@ export function createConjunctionFunction(functionNames: string[], functionName:
     );
 }
 
-export function createDisjunctionFunction(functionNames: string[], functionName: string) {
+function tryGetTrivialBody(fn: ts.FunctionDeclaration): ts.Expression | undefined {
+    const statements = fn.body?.statements;
+    if (statements === undefined) {
+        return undefined;
+    }
+
+    // We only know how to inline single-statement functions.
+    if (statements.length > 1) {
+        return undefined;
+    }
+
+    const statement = statements[0];
+    if (statement.kind === SyntaxKind.ReturnStatement) {
+        const returnStatement = statement as ReturnStatement;
+
+        return returnStatement.expression;
+    }
+
+    return undefined;
+}
+
+export function createDisjunctionFunction(functionNames: string[], functionName: string, functions: Map<string, ts.FunctionDeclaration>) {
     // This is actually a conjunction, but whatever.
     return ts.createFunctionDeclaration(
         undefined,
@@ -319,11 +341,24 @@ export function createDisjunctionFunction(functionNames: string[], functionName:
         ts.createBlock([
             ts.createReturn(
                 createBinaries(
-                    functionNames.map((n) => ts.createCall(
-                        ts.createIdentifier(n),
-                        undefined,
-                        [objectIdentifier]
-                    )),
+                    functionNames.map((n) => {
+                        // If we have a function definition, have a go at inlining. Because this is completely
+                        // reasonable :D
+                        if (functions.has(n)) {
+                            const defn = functions.get(n)!;
+                            const body = tryGetTrivialBody(defn);
+                            if (body !== undefined) {
+                                return body;
+                            }
+                        }
+
+                        // Fall back to a call expression.
+                        return ts.createCall(
+                            ts.createIdentifier(n),
+                            undefined,
+                            [objectIdentifier]
+                        );
+                    }),
                     ts.SyntaxKind.AmpersandAmpersandToken,
                     ts.createTrue()
                 )
