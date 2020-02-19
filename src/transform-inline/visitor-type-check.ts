@@ -207,29 +207,26 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                     // `if ("foo" in object && !correctType(object["foo"]) { return false; }`
                     // Otherwise,
                     // `if (!(("foo" in object) && correctType(object["foo"])) { return false; }`
-
-                    return ts.createBlock([
-                        ts.createIf(
-                            maybeNegate(!propertyInfo.optional,
+                    return ts.createIf(
+                        maybeNegate(!propertyInfo.optional,
+                            ts.createBinary(
                                 ts.createBinary(
-                                    ts.createBinary(
-                                        ts.createStringLiteral(propertyInfo.name),
-                                        ts.SyntaxKind.InKeyword,
-                                        VisitorUtils.objectIdentifier
-                                    ),
-                                    ts.SyntaxKind.AmpersandAmpersandToken,
-                                    maybeNegate(propertyInfo.optional,
-                                        ts.createCall(
-                                            ts.createIdentifier(functionName),
-                                            undefined,
-                                            [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
-                                        )
+                                    ts.createStringLiteral(propertyInfo.name),
+                                    ts.SyntaxKind.InKeyword,
+                                    VisitorUtils.objectIdentifier
+                                ),
+                                ts.SyntaxKind.AmpersandAmpersandToken,
+                                maybeNegate(propertyInfo.optional,
+                                    ts.createCall(
+                                        ts.createIdentifier(functionName),
+                                        undefined,
+                                        [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
                                     )
                                 )
-                            ),
-                            ts.createReturn(ts.createFalse())
-                        )
-                    ]);
+                            )
+                        ),
+                        ts.createReturn(ts.createFalse())
+                    );
                 }),
                 ...(
                     visitorContext.options.disallowSuperfluousObjectProperties && stringIndexFunctionName === undefined
