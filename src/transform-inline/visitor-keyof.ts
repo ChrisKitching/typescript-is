@@ -10,7 +10,7 @@ function visitUnionOrIntersectionType(type: ts.UnionOrIntersectionType, visitorC
         const functionNames = type.types.map((type) => visitType(type, visitorContext));
         if (tsutils.isUnionType(type)) {
             // keyof (T | U) = (keyof T) & (keyof U)
-            return VisitorUtils.createConjunctionFunction(functionNames, name);
+            return VisitorUtils.createConjunctionFunction(functionNames, name, visitorContext.functionMap);
         } else {
             // keyof (T & U) = (keyof T) | (keyof U)
             return VisitorUtils.createDisjunctionFunction(functionNames, name, visitorContext.functionMap);

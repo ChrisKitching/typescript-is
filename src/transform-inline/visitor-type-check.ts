@@ -351,10 +351,10 @@ function visitUnionOrIntersectionType(type: ts.UnionOrIntersectionType, visitorC
                 const keys = VisitorIsStringKeyof.visitType(type, visitorContext);
                 if (keys instanceof Set) {
                     const loop = VisitorUtils.createSuperfluousPropertiesLoop(sliceSet(keys));
-                    return VisitorUtils.createConjunctionFunction(functionNames, name, [loop]);
+                    return VisitorUtils.createConjunctionFunction(functionNames, name, visitorContext.functionMap, [loop]);
                 }
             }
-            return VisitorUtils.createConjunctionFunction(functionNames, name);
+            return VisitorUtils.createConjunctionFunction(functionNames, name, visitorContext.functionMap);
         });
     }
     throw new Error('UnionOrIntersectionType type was neither a union nor an intersection.');

@@ -100,7 +100,7 @@ function visitUnionOrIntersectionType(type: ts.UnionOrIntersectionType, indexTyp
         const functionNames = type.types.map((type) => visitType(type, indexType, visitorContext));
         if (tsutils.isUnionType(type)) {
             // (T | U)[I] = T[I] & U[I]
-            return VisitorUtils.createConjunctionFunction(functionNames, name);
+            return VisitorUtils.createConjunctionFunction(functionNames, name, visitorContext.functionMap);
         } else {
             // (T & U)[I] = T[I] | U[I]
             return VisitorUtils.createDisjunctionFunction(functionNames, name, visitorContext.functionMap);

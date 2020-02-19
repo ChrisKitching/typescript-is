@@ -277,7 +277,7 @@ export function createAcceptingFunction(functionName: string) {
     );
 }
 
-export function createConjunctionFunction(functionNames: string[], functionName: string, extraStatements?: ts.Statement[]) {
+export function createConjunctionFunction(functionNames: string[], functionName: string, functions: Map<string, ts.FunctionDeclaration>, extraStatements?: ts.Statement[]) {
     return ts.createFunctionDeclaration(
         undefined,
         undefined,
@@ -292,11 +292,7 @@ export function createConjunctionFunction(functionNames: string[], functionName:
             ...(extraStatements || []),
             ts.createReturn(
                 createBinaries(
-                    functionNames.map((n) => ts.createCall(
-                        ts.createIdentifier(n),
-                        undefined,
-                        [objectIdentifier]
-                    )),
+                    functionNames.map((n) => maybeInlinedCall(n, functions)),
                     ts.SyntaxKind.AmpersandAmpersandToken,
                     ts.createTrue()
                 )
