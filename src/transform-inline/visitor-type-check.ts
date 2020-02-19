@@ -195,28 +195,39 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                         ? VisitorUtils.getIgnoredTypeFunction(visitorContext)
                         : visitType(propertyInfo.type!, visitorContext);
 
+                    const maybeNegate = (pred: boolean, x: any) => {
+                        if (pred) {
+                            return ts.createLogicalNot(x);
+                        } else {
+                            return x;
+                        }
+                    };
+
+                    // If it's optional, we do
+                    // `if ("foo" in object && !correctType(object["foo"]) { return false; }`
+                    // Otherwise,
+                    // `if (!(("foo" in object) && correctType(object["foo"])) { return false; }`
+
                     return ts.createBlock([
                         ts.createIf(
-                            ts.createBinary(
-                                ts.createStringLiteral(propertyInfo.name),
-                                ts.SyntaxKind.InKeyword,
-                                VisitorUtils.objectIdentifier
-                            ),
-                            ts.createBlock([
-                                ts.createIf(
-                                    ts.createLogicalNot(
+                            maybeNegate(!propertyInfo.optional,
+                                ts.createBinary(
+                                    ts.createBinary(
+                                        ts.createStringLiteral(propertyInfo.name),
+                                        ts.SyntaxKind.InKeyword,
+                                        VisitorUtils.objectIdentifier
+                                    ),
+                                    ts.SyntaxKind.AmpersandAmpersandToken,
+                                    maybeNegate(propertyInfo.optional,
                                         ts.createCall(
                                             ts.createIdentifier(functionName),
                                             undefined,
                                             [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
                                         )
-                                    ),
-                                    ts.createReturn(ts.createFalse())
+                                    )
                                 )
-                            ]),
-                            propertyInfo.optional
-                                ? undefined
-                                : ts.createReturn(ts.createFalse())
+                            ),
+                            ts.createReturn(ts.createFalse())
                         )
                     ]);
                 }),
