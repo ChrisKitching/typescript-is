@@ -279,7 +279,6 @@ export function createAcceptingFunction(functionName: string) {
 export function createConjunctionFunction(functionNames: string[], functionName: string, extraStatements?: ts.Statement[]) {
     const conditionsIdentifier = ts.createIdentifier('conditions');
     const conditionIdentifier = ts.createIdentifier('condition');
-    const errorIdentifier = ts.createIdentifier('error');
     return ts.createFunctionDeclaration(
         undefined,
         undefined,
@@ -311,23 +310,13 @@ export function createConjunctionFunction(functionNames: string[], functionName:
                 ),
                 conditionsIdentifier,
                 ts.createBlock([
-                    ts.createVariableStatement(
-                        [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                        [
-                            ts.createVariableDeclaration(
-                                errorIdentifier,
-                                undefined,
-                                ts.createCall(
-                                    conditionIdentifier,
-                                    undefined,
-                                    [objectIdentifier]
-                                )
-                            )
-                        ]
-                    ),
                     ts.createIf(
-                        errorIdentifier,
-                        ts.createReturn(errorIdentifier)
+                        ts.createCall(
+                            conditionIdentifier,
+                            undefined,
+                            [objectIdentifier]
+                        ),
+                        ts.createReturn(ts.createTrue())
                     )
                 ])
             ),
@@ -372,23 +361,15 @@ export function createDisjunctionFunction(functionNames: string[], functionName:
                 ),
                 conditionsIdentifier,
                 ts.createBlock([
-                    ts.createVariableStatement(
-                        [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                        [
-                            ts.createVariableDeclaration(
-                                errorIdentifier,
-                                undefined,
-                                ts.createCall(
-                                    conditionIdentifier,
-                                    undefined,
-                                    [objectIdentifier]
-                                )
-                            )
-                        ]
-                    ),
                     ts.createIf(
-                        ts.createLogicalNot(errorIdentifier),
-                        ts.createReturn(ts.createNull())
+                        ts.createLogicalNot(
+                            ts.createCall(
+                                conditionIdentifier,
+                                undefined,
+                                [objectIdentifier]
+                            )
+                        ),
+                        ts.createReturn(ts.createFalse())
                     )
                 ])
             ),
