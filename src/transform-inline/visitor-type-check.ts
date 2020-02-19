@@ -65,21 +65,23 @@ function visitTupleObjectType(type: ts.TupleType, visitorContext: VisitorContext
                         ],
                         ts.SyntaxKind.BarBarToken
                     ),
-                    ts.createReturn(ts.createTrue())
+                    ts.createReturn(ts.createFalse())
                 ),
                 ...functionNames.map((functionName, index) =>
                     ts.createBlock([
                         ts.createIf(
-                            ts.createCall(
-                                ts.createIdentifier(functionName),
-                                undefined,
-                                [ts.createElementAccess(VisitorUtils.objectIdentifier, index)]
+                            ts.createLogicalNot(
+                                ts.createCall(
+                                    ts.createIdentifier(functionName),
+                                    undefined,
+                                    [ts.createElementAccess(VisitorUtils.objectIdentifier, index)]
+                                )
                             ),
-                            ts.createReturn(ts.createTrue())
+                            ts.createReturn(ts.createFalse())
                         )
                     ])
                 ),
-                ts.createReturn(ts.createNull())
+                ts.createReturn(ts.createTrue())
             ])
         );
     });
@@ -113,7 +115,7 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
                             [VisitorUtils.objectIdentifier]
                         )
                     ),
-                    ts.createReturn(ts.createTrue())
+                    ts.createReturn(ts.createFalse())
                 ),
                 ts.createFor(
                     ts.createVariableDeclarationList(
@@ -128,16 +130,18 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
                     ts.createPostfixIncrement(indexIdentifier),
                     ts.createBlock([
                         ts.createIf(
-                            ts.createCall(
-                                ts.createIdentifier(functionName),
-                                undefined,
-                                [ts.createElementAccess(VisitorUtils.objectIdentifier, indexIdentifier)]
+                            ts.createLogicalNot(
+                                ts.createCall(
+                                    ts.createIdentifier(functionName),
+                                    undefined,
+                                    [ts.createElementAccess(VisitorUtils.objectIdentifier, indexIdentifier)]
+                                )
                             ),
-                            ts.createReturn(ts.createTrue())
+                            ts.createReturn(ts.createFalse())
                         )
                     ])
                 ),
-                ts.createReturn(ts.createNull())
+                ts.createReturn(ts.createTrue())
             ])
         );
     });
@@ -180,7 +184,7 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                         ],
                         ts.SyntaxKind.BarBarToken
                     ),
-                    ts.createReturn(ts.createTrue())
+                    ts.createReturn(ts.createFalse())
                 ),
                 // Validate the object properties.
                 ...propertyInfos.map((propertyInfo) => {
@@ -200,17 +204,19 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                             ),
                             ts.createBlock([
                                 ts.createIf(
-                                    ts.createCall(
-                                        ts.createIdentifier(functionName),
-                                        undefined,
-                                        [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
+                                    ts.createLogicalNot(
+                                        ts.createCall(
+                                            ts.createIdentifier(functionName),
+                                            undefined,
+                                            [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
+                                        )
                                     ),
-                                    ts.createReturn(ts.createTrue())
+                                    ts.createReturn(ts.createFalse())
                                 )
                             ]),
                             propertyInfo.optional
                                 ? undefined
-                                : ts.createReturn(ts.createTrue())
+                                : ts.createReturn(ts.createFalse())
                         )
                     ]);
                 }),
@@ -231,19 +237,21 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                                 ts.createCall(ts.createPropertyAccess(ts.createIdentifier('Object'), 'keys'), undefined, [VisitorUtils.objectIdentifier]),
                                 ts.createBlock([
                                     ts.createIf(
-                                        ts.createCall(
-                                            ts.createIdentifier(stringIndexFunctionName),
-                                            undefined,
-                                            [ts.createElementAccess(VisitorUtils.objectIdentifier, keyIdentifier)]
+                                        ts.createLogicalNot(
+                                            ts.createCall(
+                                                ts.createIdentifier(stringIndexFunctionName),
+                                                undefined,
+                                                [ts.createElementAccess(VisitorUtils.objectIdentifier, keyIdentifier)]
+                                            )
                                         ),
-                                        ts.createReturn(ts.createTrue())
+                                        ts.createReturn(ts.createFalse())
                                     )
                                 ])
                             )
                         ]
                         : []
                 ),
-                ts.createReturn(ts.createNull())
+                ts.createReturn(ts.createTrue())
             ])
         );
     });
@@ -290,7 +298,7 @@ function visitLiteralType(type: ts.LiteralType, visitorContext: VisitorContext) 
         const value = type.value;
         return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
             return VisitorUtils.createAssertionFunction(
-                ts.createStrictInequality(
+                ts.createStrictEquality(
                     VisitorUtils.objectIdentifier,
                     ts.createStringLiteral(value)
                 ),
@@ -303,7 +311,7 @@ function visitLiteralType(type: ts.LiteralType, visitorContext: VisitorContext) 
         const value = type.value;
         return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
             return VisitorUtils.createAssertionFunction(
-                ts.createStrictInequality(
+                ts.createStrictEquality(
                     VisitorUtils.objectIdentifier,
                     ts.createNumericLiteral(value.toString())
                 ),
@@ -351,7 +359,7 @@ function visitBooleanLiteral(type: ts.Type, visitorContext: VisitorContext) {
         const name = '_true';
         return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
             return VisitorUtils.createAssertionFunction(
-                ts.createStrictInequality(
+                ts.createStrictEquality(
                     VisitorUtils.objectIdentifier,
                     ts.createTrue()
                 ),
@@ -363,7 +371,7 @@ function visitBooleanLiteral(type: ts.Type, visitorContext: VisitorContext) {
         const name = '_false';
         return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
             return VisitorUtils.createAssertionFunction(
-                ts.createStrictInequality(
+                ts.createStrictEquality(
                     VisitorUtils.objectIdentifier,
                     ts.createFalse()
                 ),
@@ -406,7 +414,7 @@ function visitNonPrimitiveType(type: ts.Type, visitorContext: VisitorContext) {
             ];
             const condition = VisitorUtils.createBinaries(conditions, ts.SyntaxKind.AmpersandAmpersandToken);
             return VisitorUtils.createAssertionFunction(
-                ts.createLogicalNot(condition),
+                condition,
                 { type: 'non-primitive' },
                 name
             );
@@ -541,23 +549,20 @@ export function visitUndefinedOrType(type: ts.Type, visitorContext: VisitorConte
             ],
             undefined,
             ts.createBlock([
-                ts.createIf(
-                    ts.createStrictInequality(
-                        VisitorUtils.objectIdentifier,
-                        ts.createIdentifier('undefined')
-                    ),
-                    ts.createBlock([
-                        ts.createIf(
-                            ts.createCall(
-                                ts.createIdentifier(functionName),
-                                undefined,
-                                [VisitorUtils.objectIdentifier]
-                            ),
-                            ts.createReturn(ts.createTrue())
+                ts.createReturn(
+                    ts.createBinary(
+                        ts.createStrictEquality(
+                            VisitorUtils.objectIdentifier,
+                            ts.createIdentifier('undefined')
+                        ),
+                        ts.SyntaxKind.BarBarToken,
+                        ts.createCall(
+                            ts.createIdentifier(functionName),
+                            undefined,
+                            [VisitorUtils.objectIdentifier]
                         )
-                    ])
-                ),
-                ts.createReturn(ts.createNull())
+                    )
+                )
             ])
         );
     });

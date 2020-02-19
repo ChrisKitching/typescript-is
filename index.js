@@ -36,7 +36,7 @@ function ValidateClass(errorConstructor = TypeGuardError) {
                 target.prototype[propertyKey] = function (...args) {
                     for (let i = 0; i < assertions.length; i++) {
                         const errorObject = assertions[i].assertion(args[i]);
-                        if (errorObject) {
+                        if (!errorObject) {
                             throw new errorConstructor(errorObject);
                         }
                     }
@@ -49,16 +49,12 @@ function ValidateClass(errorConstructor = TypeGuardError) {
 
 function is(obj, getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
-    if (getErrorObject(obj)) {
-        return false;
-    } else {
-        return true;
-    }
+    return getErrorObject(obj);
 }
 
 function assertType(obj, getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
-    if (getErrorObject(obj)) {
+    if (!getErrorObject(obj)) {
         throw new TypeGuardError("Type guard failure");
     } else {
         return obj;

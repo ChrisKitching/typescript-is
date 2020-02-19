@@ -53,9 +53,9 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
             const properties = visitorContext.checker.getPropertiesOfType(type);
             const names = properties.map((property) => property.name);
             const condition = VisitorUtils.createBinaries(
-                names.map((name) => ts.createStrictInequality(VisitorUtils.objectIdentifier, ts.createStringLiteral(name))),
-                ts.SyntaxKind.AmpersandAmpersandToken,
-                ts.createTrue()
+                names.map((name) => ts.createStrictEquality(VisitorUtils.objectIdentifier, ts.createStringLiteral(name))),
+                ts.SyntaxKind.BarBarToken,
+                ts.createFalse()
             );
             return VisitorUtils.createAssertionFunction(
                 condition,

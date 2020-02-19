@@ -135,7 +135,7 @@ export function getStringFunction(visitorContext: VisitorContext) {
     const name = '_string';
     return setFunctionIfNotExists(name, visitorContext, () => {
         return createAssertionFunction(
-            ts.createStrictInequality(
+            ts.createStrictEquality(
                 ts.createTypeOf(objectIdentifier),
                 ts.createStringLiteral('string')
             ),
@@ -149,7 +149,7 @@ export function getBooleanFunction(visitorContext: VisitorContext) {
     const name = '_boolean';
     return setFunctionIfNotExists(name, visitorContext, () => {
         return createAssertionFunction(
-            ts.createStrictInequality(
+            ts.createStrictEquality(
                 ts.createTypeOf(objectIdentifier),
                 ts.createStringLiteral('boolean')
             ),
@@ -163,7 +163,7 @@ export function getBigIntFunction(visitorContext: VisitorContext) {
     const name = '_bigint';
     return setFunctionIfNotExists(name, visitorContext, () => {
         return createAssertionFunction(
-            ts.createStrictInequality(
+            ts.createStrictEquality(
                 ts.createTypeOf(objectIdentifier),
                 ts.createStringLiteral('bigint')
             ),
@@ -177,7 +177,7 @@ export function getNumberFunction(visitorContext: VisitorContext) {
     const name = '_number';
     return setFunctionIfNotExists(name, visitorContext, () => {
         return createAssertionFunction(
-            ts.createStrictInequality(
+            ts.createStrictEquality(
                 ts.createTypeOf(objectIdentifier),
                 ts.createStringLiteral('number')
             ),
@@ -191,7 +191,7 @@ export function getUndefinedFunction(visitorContext: VisitorContext) {
     const name = '_undefined';
     return setFunctionIfNotExists(name, visitorContext, () => {
         return createAssertionFunction(
-            ts.createStrictInequality(
+            ts.createStrictEquality(
                 objectIdentifier,
                 ts.createIdentifier('undefined')
             ),
@@ -205,7 +205,7 @@ export function getNullFunction(visitorContext: VisitorContext) {
     const name = '_null';
     return setFunctionIfNotExists(name, visitorContext, () => {
         return createAssertionFunction(
-            ts.createStrictInequality(
+            ts.createStrictEquality(
                 objectIdentifier,
                 ts.createNull()
             ),
@@ -229,7 +229,7 @@ export function getNeverFunction(visitorContext: VisitorContext) {
             ],
             undefined,
             ts.createBlock([
-                ts.createReturn(ts.createTrue())
+                ts.createReturn(ts.createFalse())
             ])
         );
     });
@@ -273,7 +273,7 @@ export function createAcceptingFunction(functionName: string) {
         undefined,
         [],
         undefined,
-        ts.createBlock([ts.createReturn(ts.createNull())])
+        ts.createBlock([ts.createReturn(ts.createTrue())])
     );
 }
 
@@ -297,7 +297,7 @@ export function createConjunctionFunction(functionNames: string[], functionName:
                         undefined,
                         [objectIdentifier]
                     )),
-                    ts.SyntaxKind.BarBarToken,
+                    ts.SyntaxKind.AmpersandAmpersandToken,
                     ts.createTrue()
                 )
             )
@@ -359,7 +359,7 @@ export function createDisjunctionFunction(functionNames: string[], functionName:
                             [objectIdentifier]
                         );
                     }),
-                    ts.SyntaxKind.AmpersandAmpersandToken,
+                    ts.SyntaxKind.BarBarToken,
                     ts.createTrue()
                 )
             )
@@ -367,7 +367,7 @@ export function createDisjunctionFunction(functionNames: string[], functionName:
     );
 }
 
-export function createAssertionFunction(failureCondition: ts.Expression, expected: Reason, functionName: string) {
+export function createAssertionFunction(successCondition: ts.Expression, expected: Reason, functionName: string) {
     return ts.createFunctionDeclaration(
         undefined,
         undefined,
@@ -379,7 +379,7 @@ export function createAssertionFunction(failureCondition: ts.Expression, expecte
         ],
         undefined,
         ts.createBlock([
-            ts.createReturn(failureCondition)
+            ts.createReturn(successCondition)
         ])
     );
 }
@@ -399,7 +399,7 @@ export function createSuperfluousPropertiesLoop(propertyNames: string[]) {
                     ts.SyntaxKind.AmpersandAmpersandToken,
                     ts.createTrue()
                 ),
-                ts.createReturn(ts.createTrue())
+                ts.createReturn(ts.createFalse())
             )
         ])
     );
