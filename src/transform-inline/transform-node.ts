@@ -35,10 +35,6 @@ function createArrowFunction(type: ts.Type, optional: boolean, partialVisitorCon
         undefined,
         undefined,
         ts.createBlock([
-            ts.createVariableStatement(
-                [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-                [ts.createVariableDeclaration(VisitorUtils.pathIdentifier, undefined, ts.createArrayLiteral([ts.createStringLiteral('$')]))]
-            ),
             ...declarations,
             ts.createVariableStatement(
                 [ts.createModifier(ts.SyntaxKind.ConstKeyword)],

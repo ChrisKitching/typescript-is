@@ -4,7 +4,6 @@ import { VisitorContext } from './visitor-context';
 import { Reason } from '../../index';
 
 export const objectIdentifier = ts.createIdentifier('object');
-export const pathIdentifier = ts.createIdentifier('path');
 const keyIdentifier = ts.createIdentifier('key');
 
 export function checkIsClass(type: ts.ObjectType, visitorContext: VisitorContext) {

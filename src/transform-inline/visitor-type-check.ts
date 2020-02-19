@@ -70,13 +70,6 @@ function visitTupleObjectType(type: ts.TupleType, visitorContext: VisitorContext
                 ),
                 ...functionNames.map((functionName, index) =>
                     ts.createBlock([
-                        ts.createExpressionStatement(
-                            ts.createCall(
-                                ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'push'),
-                                undefined,
-                                [ts.createStringLiteral(`[${index}]`)]
-                            )
-                        ),
                         ts.createVariableStatement(
                             [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
                             [
@@ -90,13 +83,6 @@ function visitTupleObjectType(type: ts.TupleType, visitorContext: VisitorContext
                                     )
                                 )
                             ]
-                        ),
-                        ts.createExpressionStatement(
-                            ts.createCall(
-                                ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'pop'),
-                                undefined,
-                                undefined
-                            )
                         ),
                         ts.createIf(
                             errorIdentifier,
@@ -153,22 +139,6 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
                     ),
                     ts.createPostfixIncrement(indexIdentifier),
                     ts.createBlock([
-                        ts.createExpressionStatement(
-                            ts.createCall(
-                                ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'push'),
-                                undefined,
-                                [
-                                    VisitorUtils.createBinaries(
-                                        [
-                                            ts.createStringLiteral('['),
-                                            indexIdentifier,
-                                            ts.createStringLiteral(']')
-                                        ],
-                                        ts.SyntaxKind.PlusToken
-                                    )
-                                ]
-                            )
-                        ),
                         ts.createVariableStatement(
                             [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
                             [
@@ -182,13 +152,6 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
                                     )
                                 )
                             ]
-                        ),
-                        ts.createExpressionStatement(
-                            ts.createCall(
-                                ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'pop'),
-                                undefined,
-                                undefined
-                            )
                         ),
                         ts.createIf(
                             errorIdentifier,
@@ -257,13 +220,6 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                                 VisitorUtils.objectIdentifier
                             ),
                             ts.createBlock([
-                                ts.createExpressionStatement(
-                                    ts.createCall(
-                                        ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'push'),
-                                        undefined,
-                                        [ts.createStringLiteral(propertyInfo.name)]
-                                    )
-                                ),
                                 ts.createVariableStatement(
                                     [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
                                     [
@@ -277,13 +233,6 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                                             )
                                         )
                                     ]
-                                ),
-                                ts.createExpressionStatement(
-                                    ts.createCall(
-                                        ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'pop'),
-                                        undefined,
-                                        undefined
-                                    )
                                 ),
                                 ts.createIf(
                                     errorIdentifier,
@@ -312,13 +261,6 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                                 ),
                                 ts.createCall(ts.createPropertyAccess(ts.createIdentifier('Object'), 'keys'), undefined, [VisitorUtils.objectIdentifier]),
                                 ts.createBlock([
-                                    ts.createExpressionStatement(
-                                        ts.createCall(
-                                            ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'push'),
-                                            undefined,
-                                            [keyIdentifier]
-                                        )
-                                    ),
                                     ts.createVariableStatement(
                                         [ts.createModifier(ts.SyntaxKind.ConstKeyword)],
                                         [
@@ -332,13 +274,6 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                                                 )
                                             )
                                         ]
-                                    ),
-                                    ts.createExpressionStatement(
-                                        ts.createCall(
-                                            ts.createPropertyAccess(VisitorUtils.pathIdentifier, 'pop'),
-                                            undefined,
-                                            undefined
-                                        )
                                     ),
                                     ts.createIf(
                                         errorIdentifier,
