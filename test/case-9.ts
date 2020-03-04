@@ -3,12 +3,12 @@ import { assertType } from '../index';
 
 describe('assertType', () => {
     describe('assertType<number>', () => {
-        it('should return the numbers passed to it', () => {
-            assert.deepStrictEqual(assertType<number>(-1), -1);
-            assert.deepStrictEqual(assertType<number>(0), 0);
-            assert.deepStrictEqual(assertType<number>(1), 1);
-            assert.deepStrictEqual(Number.isNaN(assertType<number>(Number.NaN)), true);
-            assert.deepStrictEqual(assertType<number>(Number.POSITIVE_INFINITY), Number.POSITIVE_INFINITY);
+        it('should not throw when given numbers', () => {
+            assert.doesNotThrow(() => assertType<number>(-1));
+            assert.doesNotThrow(() => assertType<number>(0));
+            assert.doesNotThrow(() => assertType<number>(1));
+            assert.doesNotThrow(() => assertType<number>(Number.NaN));
+            assert.doesNotThrow(() => assertType<number>(Number.POSITIVE_INFINITY));
         });
 
         it('should throw an error if non-numbers are passed to it', () => {

@@ -56,8 +56,6 @@ function assertType(obj, getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
         throw new TypeGuardError("Type guard failure");
-    } else {
-        return obj;
     }
 }
 

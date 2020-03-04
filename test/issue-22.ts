@@ -55,9 +55,9 @@ describe('createEquals', () => {
 
 describe('assertEquals', () => {
     describe('assertEquals<{ foo: number }>', () => {
-        it('should return the objects passed to it', () => {
-            assert.deepStrictEqual(assertEquals<{ foo: number }>({ foo: 0 }), { foo: 0 });
-            assert.deepStrictEqual(assertEquals<{ foo: number }>({ foo: 1 }), { foo: 1 });
+        it('should not throw if given valid objects', () => {
+            assert.doesNotThrow(() => assertEquals<{ foo: number }>({ foo: 0 }));
+            assert.doesNotThrow(() => assertEquals<{ foo: number }>({ foo: 1 }));
         });
 
         it('should throw an error if objects without `foo` being a number are passed to it', () => {
@@ -80,9 +80,9 @@ describe('createAssertEquals', () => {
             assert.deepStrictEqual(typeof assertObject, 'function');
         });
 
-        it('should return the objects passed to it', () => {
-            assert.deepStrictEqual(assertObject({ foo: 0 }), { foo: 0 });
-            assert.deepStrictEqual(assertObject({ foo: 1 }), { foo: 1 });
+        it('should not throw when given valid objects', () => {
+            assert.doesNotThrow(() => assertObject({ foo: 0 }));
+            assert.doesNotThrow(() => assertObject({ foo: 1 }));
         });
 
         it('should throw an error if objects without `foo` being a number are passed to it', () => {

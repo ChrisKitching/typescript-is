@@ -5,11 +5,11 @@ import { assertType } from '../index';
 
 describe('assertType', () => {
     describe('assertType<{ foo: string }>', () => {
-        it('should return valid objects that are passed to it', () => {
-            assert.deepStrictEqual(assertType<{ foo: string }>({ foo: '' }), { foo: '' });
-            assert.deepStrictEqual(assertType<{ foo: string }>({ foo: '0' }), { foo: '0' });
-            assert.deepStrictEqual(assertType<{ foo: string }>({ foo: 'a' }), { foo: 'a' });
-            assert.deepStrictEqual(assertType<{ foo: string }>({ foo: 'true' }), { foo: 'true' });
+        it('should not throw when given valid objects', () => {
+            assert.doesNotThrow(() => assertType<{ foo: string }>({ foo: '' }));
+            assert.doesNotThrow(() => assertType<{ foo: string }>({ foo: '0' }));
+            assert.doesNotThrow(() => assertType<{ foo: string }>({ foo: 'a' }));
+            assert.doesNotThrow(() => assertType<{ foo: string }>({ foo: 'true' }));
         });
 
         it('should throw an error if invalid objects are passed to it', () => {
@@ -31,11 +31,11 @@ describe('assertType', () => {
     });
 
     describe('assertType<{ foo: number[] }>', () => {
-        it('should return valid objects that are passed to it', () => {
-            assert.deepStrictEqual(assertType<{ foo: number[] }>({ foo: [] }), { foo: [] });
-            assert.deepStrictEqual(assertType<{ foo: number[] }>({ foo: [0] }), { foo: [0] });
-            assert.deepStrictEqual(assertType<{ foo: number[] }>({ foo: [0, 1] }), { foo: [0, 1] });
-            assert.deepStrictEqual(assertType<{ foo: number[] }>({ foo: [Number.NEGATIVE_INFINITY] }), { foo: [Number.NEGATIVE_INFINITY] });
+        it('should not throw when given valid objects', () => {
+            assert.doesNotThrow(() => assertType<{ foo: number[] }>({ foo: [] }));
+            assert.doesNotThrow(() => assertType<{ foo: number[] }>({ foo: [0] }));
+            assert.doesNotThrow(() => assertType<{ foo: number[] }>({ foo: [0, 1] }));
+            assert.doesNotThrow(() => assertType<{ foo: number[] }>({ foo: [Number.NEGATIVE_INFINITY] }));
             // assert.deepStrictEqual(assertType<{ foo: number[] }>({ foo: [Number.NaN] }), { foo: [Number.NaN] }); // NodeJS 6, 7 and 8 fail on NaN comparison
         });
 
@@ -64,9 +64,9 @@ describe('assertType', () => {
             foo: 'bar' | 'baz';
         }
 
-        it('should return valid objects that are passed to it', () => {
-            assert.deepStrictEqual(assertType<{ nested: Nested }>({ nested: { foo: 'bar' } }), { nested: { foo: 'bar' } });
-            assert.deepStrictEqual(assertType<{ nested: Nested }>({ nested: { foo: 'baz' } }), { nested: { foo: 'baz' } });
+        it('should not throw when given valid objects', () => {
+            assert.doesNotThrow(() => assertType<{ nested: Nested }>({ nested: { foo: 'bar' } }));
+            assert.doesNotThrow(() => assertType<{ nested: Nested }>({ nested: { foo: 'baz' } }));
         });
 
         it('should throw an error if nested objects with foo not \'bar\' or \'baz\' are passed to it', () => {
@@ -103,10 +103,10 @@ describe('assertType', () => {
     });
 
     describe('assertType<{ [Key: string]: boolean }>', () => {
-        it('should return valid objects that are passed to it', () => {
-            assert.deepStrictEqual(assertType<{ [Key: string]: boolean }>({}), {});
-            assert.deepStrictEqual(assertType<{ [Key: string]: boolean }>({ foo: true }), { foo: true });
-            assert.deepStrictEqual(assertType<{ [Key: string]: boolean }>({ bar: false }), { bar: false });
+        it('should not throw when given valid objects', () => {
+            assert.doesNotThrow(() => assertType<{ [Key: string]: boolean }>({}));
+            assert.doesNotThrow(() => assertType<{ [Key: string]: boolean }>({ foo: true }));
+            assert.doesNotThrow(() => assertType<{ [Key: string]: boolean }>({ bar: false }));
         });
 
         it('should throw an error if objects with non-boolen values are passed to it', () => {

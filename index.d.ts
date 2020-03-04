@@ -67,7 +67,7 @@ export function createEquals<T>(): (object: any) => object is T;
    assertType<number>('foo'); // throws an error
    ```
  */
-export function assertType<T>(object: any): T;
+export function assertType<T>(object: any): asserts object is T;
 
 /**
  * Creates a function similar to `assertType<T>` that can be invoked at a later point.
@@ -97,7 +97,7 @@ export function createAssertType<T>(): (object: any) => T;
    assertEquals<{ foo: string }>({ foo: 'bar', baz: 'qux' }); // throws an error
    ```
  */
-export function assertEquals<T>(object: any): T;
+export function assertEquals<T>(object: any): asserts object is T;
 
 /**
  * Creates a function similar to `assertEquals<T>` that can be invoked at a later point.

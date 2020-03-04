@@ -40,12 +40,12 @@ describe('createAssertType', () => {
             assert.deepStrictEqual(typeof assertNumber, 'function');
         });
 
-        it('should return a function that returns the numbers passed to it', () => {
-            assert.deepStrictEqual(assertNumber(-1), -1);
-            assert.deepStrictEqual(assertNumber(0), 0);
-            assert.deepStrictEqual(assertNumber(1), 1);
-            assert.deepStrictEqual(Number.isNaN(assertNumber(Number.NaN)), true);
-            assert.deepStrictEqual(assertNumber(Number.POSITIVE_INFINITY), Number.POSITIVE_INFINITY);
+        it('should return a function that does not throw when given numbers', () => {
+            assert.doesNotThrow(() => assertNumber(-1));
+            assert.doesNotThrow(() => assertNumber(0));
+            assert.doesNotThrow(() => assertNumber(1));
+            assert.doesNotThrow(() => assertNumber(Number.NaN));
+            assert.doesNotThrow(() => assertNumber(Number.POSITIVE_INFINITY));
         });
 
         it('should return a function that throws if non-numbers are passed to it', () => {

@@ -5,8 +5,8 @@ import { assertType, TypeGuardError, createAssertType } from '../index';
 
 describe('is', () => {
     describe('assertType<{}>', () => {
-        it('should return the objects passed to it', () => {
-            assert.deepStrictEqual(assertType<{}>({}), {});
+        it('should not throw when given empty-object', () => {
+            assert.doesNotThrow(() => assertType<{}>({}));
         });
 
         it('should throw a TypeGuardValidation error if failing objects are passed to it', () => {
@@ -28,8 +28,8 @@ describe('is', () => {
             assert.deepStrictEqual(typeof createAssertType<{}>(), 'function');
         });
 
-        it('should return a function that returns the objects passed to it', () => {
-            assert.deepStrictEqual(createAssertType<{}>()({}), {});
+        it('should return a function that does not throw when given empty-object', () => {
+            assert.doesNotThrow(() => createAssertType<{}>()({}));
         });
 
         it('should throw a TypeGuardValidation error if failing objects are passed to it', () => {
