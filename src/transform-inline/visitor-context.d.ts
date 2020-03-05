@@ -2,7 +2,6 @@ import * as ts from 'typescript';
 
 interface Options {
     shortCircuit: boolean;
-    ignoreClasses: boolean;
     ignoreMethods: boolean;
     disallowSuperfluousObjectProperties: boolean;
 }

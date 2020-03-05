@@ -29,7 +29,6 @@ describe('visitor', () => {
             checker: program.getTypeChecker(),
             program,
             options: {
-                ignoreClasses: false,
                 ignoreMethods: true,
                 shortCircuit: false,
                 disallowSuperfluousObjectProperties: false

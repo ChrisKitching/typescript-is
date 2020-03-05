@@ -27,7 +27,6 @@ const visitorContext: PartialVisitorContext = {
     program,
     options: {
         shortCircuit: false,
-        ignoreClasses: false,
         ignoreMethods: true,
         disallowSuperfluousObjectProperties: false
     },

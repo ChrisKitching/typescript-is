@@ -29,7 +29,6 @@ describe('visitor', () => {
             checker: program.getTypeChecker(),
             program,
             options: {
-                ignoreClasses: true,
                 ignoreMethods: false,
                 shortCircuit: false,
                 disallowSuperfluousObjectProperties: false
@@ -55,7 +54,6 @@ describe('visitor', () => {
             checker: program.getTypeChecker(),
             program,
             options: {
-                ignoreClasses: false,
                 ignoreMethods: true,
                 shortCircuit: false,
                 disallowSuperfluousObjectProperties: false
@@ -81,7 +79,6 @@ describe('visitor', () => {
             checker: program.getTypeChecker(),
             program,
             options: {
-                ignoreClasses: true,
                 ignoreMethods: true,
                 shortCircuit: false,
                 disallowSuperfluousObjectProperties: false
@@ -107,7 +104,6 @@ describe('visitor', () => {
             checker: program.getTypeChecker(),
             program,
             options: {
-                ignoreClasses: true,
                 ignoreMethods: true,
                 shortCircuit: false,
                 disallowSuperfluousObjectProperties: false
