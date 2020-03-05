@@ -23,15 +23,7 @@ export function checkIsClass(type: ts.ObjectType, visitorContext: VisitorContext
         hasConstructSignatures = constructSignatures.length >= 1;
     }
 
-    if (type.isClass() || hasConstructSignatures) {
-        if (visitorContext.options.ignoreClasses) {
-            return true;
-        } else {
-            throw new Error('Classes cannot be validated. https://github.com/woutervh-/typescript-is/issues/3');
-        }
-    } else {
-        return false;
-    }
+    return type.isClass() || hasConstructSignatures;
 }
 
 export function setFunctionIfNotExists(name: string, visitorContext: VisitorContext, factory: () => ts.FunctionDeclaration) {
@@ -49,7 +41,8 @@ export function getPropertyInfo(symbol: ts.Symbol, visitorContext: VisitorContex
     }
     if ('valueDeclaration' in symbol) {
         const valueDeclaration = symbol.valueDeclaration;
-        if (!ts.isPropertySignature(valueDeclaration) && !ts.isMethodSignature(valueDeclaration)) {
+        if (!ts.isPropertyDeclaration(valueDeclaration) &&
+            !ts.isPropertySignature(valueDeclaration) && !ts.isMethodSignature(valueDeclaration)) {
             throw new Error('Unsupported declaration kind: ' + valueDeclaration.kind);
         }
         const isMethod = ts.isMethodSignature(valueDeclaration)

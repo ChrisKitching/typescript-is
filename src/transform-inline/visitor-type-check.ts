@@ -283,9 +283,6 @@ function visitTypeParameter(type: ts.Type, visitorContext: VisitorContext) {
 }
 
 function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
-    if (VisitorUtils.checkIsClass(type, visitorContext)) {
-        return VisitorUtils.getIgnoredTypeFunction(visitorContext);
-    }
     if (tsutils.isTupleType(type)) {
         // Tuple with finite length.
         return visitTupleObjectType(type, visitorContext);
@@ -293,6 +290,7 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
         // Index type is number -> array type.
         return visitArrayObjectType(type, visitorContext);
     } else {
+        // Also class should end up here
         // Index type is string -> regular object type.
         return visitRegularObjectType(type, visitorContext);
     }
