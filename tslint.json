@@ -72,6 +72,9 @@
         ],
         "no-bitwise": [
             false
+        ],
+        "max-classes-per-file": [
+            -1
         ]
     }
 }
