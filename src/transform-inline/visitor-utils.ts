@@ -42,10 +42,12 @@ export function getPropertyInfo(symbol: ts.Symbol, visitorContext: VisitorContex
     if ('valueDeclaration' in symbol) {
         const valueDeclaration = symbol.valueDeclaration;
         if (!ts.isPropertyDeclaration(valueDeclaration) &&
-            !ts.isPropertySignature(valueDeclaration) && !ts.isMethodSignature(valueDeclaration)) {
+            !ts.isParameter(valueDeclaration) && // a public parameter in constructor
+            !ts.isPropertySignature(valueDeclaration) &&
+            !ts.isMethodDeclaration(valueDeclaration) && !ts.isMethodSignature(valueDeclaration)) {
             throw new Error('Unsupported declaration kind: ' + valueDeclaration.kind);
         }
-        const isMethod = ts.isMethodSignature(valueDeclaration)
+        const isMethod = ts.isMethodDeclaration(valueDeclaration) || ts.isMethodSignature(valueDeclaration)
             || valueDeclaration.type !== undefined && ts.isFunctionTypeNode(valueDeclaration.type);
         if (isMethod && !visitorContext.options.ignoreMethods) {
             throw new Error('Encountered a method declaration, but methods are not supported. Issue: https://github.com/woutervh-/typescript-is/issues/5');
