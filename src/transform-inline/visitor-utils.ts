@@ -1,8 +1,8 @@
 import * as ts from 'typescript';
-import * as tsutils from 'tsutils/typeguard/3.0';
-import { VisitorContext } from './visitor-context';
-import { Reason } from '../../index';
 import {ReturnStatement, SyntaxKind} from 'typescript';
+import * as tsutils from 'tsutils/typeguard/3.0';
+import {VisitorContext} from './visitor-context';
+import {Reason} from '../../index';
 
 export const objectIdentifier = ts.createIdentifier('object');
 const keyIdentifier = ts.createIdentifier('key');
@@ -55,7 +55,9 @@ export function getPropertyInfo(symbol: ts.Symbol, visitorContext: VisitorContex
         let propertyType: ts.Type | undefined = undefined;
         if (valueDeclaration.type === undefined) {
             if (!isMethod) {
-                throw new Error('Found property without type.');
+                throw new Error('Seems the property has an undefined type.'+
+                ' This usually means you meant for typescript to infer it,'+
+                ' however typescript-is cannot do this. Please add a type.');
             }
         } else {
             propertyType = visitorContext.checker.getTypeFromTypeNode(valueDeclaration.type);

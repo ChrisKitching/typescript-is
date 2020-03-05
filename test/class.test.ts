@@ -1,4 +1,5 @@
 import {assertType} from '../index';
+import * as assert from 'assert';
 
 
 export class UsefulObject {
@@ -17,6 +18,11 @@ export class UsefulObjectWithConProps {
         throw Error('Religion is under specified.');
     }
 }
+
+export class AStreamObject {
+    stream: any;
+    boats: string[] = ['string'];
+}
 const wildObject = {name:'banana', value: 1};
 
 const wilderObject = {name:'Gene Wilder', value: -1, pockets: ['chocolate']};
@@ -30,5 +36,12 @@ describe('Checking class type', () => {
     it('understands properties defined in constructor and ignores random methods', () => {
         assertType<UsefulObjectWithConProps>(wildObject);
         assertType<UsefulObjectWithConProps>(wilderObject);
+    });
+
+    it('should screech at incompatible types', () => {
+        try {
+            assertType<AStreamObject>(wilderObject);
+            assert.fail('Did not screech');
+        } catch (e) {}
     });
 });
