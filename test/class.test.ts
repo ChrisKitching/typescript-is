@@ -23,9 +23,23 @@ export class AStreamObject {
     stream: any;
     boats: string[] = ['string'];
 }
+
 const wildObject = {name:'banana', value: 1};
 
 const wilderObject = {name:'Gene Wilder', value: -1, pockets: ['chocolate']};
+
+enum MyEnum {
+    Test,
+    BadTest
+}
+
+export class ClassWithEnum {
+    id = MyEnum.Test;
+}
+
+export class ClassWithOtherEnum {
+    id = MyEnum.BadTest;
+}
 
 describe('Checking class type', () => {
     it('should be able to check wild objects against class definition', () => {
@@ -41,6 +55,17 @@ describe('Checking class type', () => {
     it('should screech at incompatible types', () => {
         try {
             assertType<AStreamObject>(wilderObject);
+            assert.fail('Did not screech');
+        } catch (e) {}
+    });
+
+    it('should infer simple property types', () => {
+        const o = { id: 0 };
+
+        assertType<ClassWithEnum>(o);
+
+        try {
+            assertType<ClassWithOtherEnum>(o);
             assert.fail('Did not screech');
         } catch (e) {}
     });

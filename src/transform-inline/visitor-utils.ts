@@ -55,9 +55,10 @@ export function getPropertyInfo(symbol: ts.Symbol, visitorContext: VisitorContex
         let propertyType: ts.Type | undefined = undefined;
         if (valueDeclaration.type === undefined) {
             if (!isMethod) {
-                throw new Error('Seems the property has an undefined type.'+
-                ' This usually means you meant for typescript to infer it,'+
-                ' however typescript-is cannot do this. Please add a type.');
+                propertyType = visitorContext.checker.getTypeAtLocation(valueDeclaration);
+                if (propertyType === undefined) {
+                    throw new Error('Seems the property has an undefined type.');
+                }
             }
         } else {
             propertyType = visitorContext.checker.getTypeFromTypeNode(valueDeclaration.type);
