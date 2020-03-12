@@ -21,31 +21,6 @@ delete configParseResult.options.outFile;
 delete configParseResult.options.declaration;
 
 describe('visitor', () => {
-    describe('visitor test-fixtures/issue-16-a.ts', () => {
-        const inFile = path.resolve(__dirname, '..', 'test-fixtures', 'issue-16-a.ts');
-        const program = ts.createProgram([inFile], configParseResult.options);
-
-        const visitorContext: PartialVisitorContext = {
-            checker: program.getTypeChecker(),
-            program,
-            options: {
-                ignoreMethods: false,
-                shortCircuit: false,
-                disallowSuperfluousObjectProperties: false
-            },
-            typeMapperStack: [],
-            previousTypeReference: null
-        };
-
-        function visitNodeAndChildren(node: ts.Node) {
-            ts.forEachChild(transformNode(node, visitorContext), visitNodeAndChildren);
-        }
-
-        it('should not throw an error for classes', () => {
-            visitNodeAndChildren(program.getSourceFile(inFile)!);
-        });
-    });
-
     describe('visitor test-fixtures/issue-16-b.ts', () => {
         const inFile = path.resolve(__dirname, '..', 'test-fixtures', 'issue-16-b.ts');
         const program = ts.createProgram([inFile], configParseResult.options);
