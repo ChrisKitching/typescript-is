@@ -52,10 +52,10 @@ function is(obj, getErrorObject = defaultGetErrorObject) {
     return getErrorObject(obj);
 }
 
-function assertType(obj, getErrorObject = defaultGetErrorObject) {
+function assertType(obj, err = new TypeGuardError("Type guard failure"), getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
-        throw new TypeGuardError("Type guard failure");
+        throw err;
     }
 }
 
@@ -66,7 +66,7 @@ function createIs(getErrorObject = defaultGetErrorObject) {
 
 function createAssertType(getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
-    return (obj) => assertType(obj, getErrorObject);
+    return (obj) => assertType(obj, undefined, getErrorObject);
 }
 
 function setDefaultGetErrorObject(getErrorObject) {

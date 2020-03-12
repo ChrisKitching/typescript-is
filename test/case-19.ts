@@ -31,6 +31,13 @@ describe('assertType', () => {
             assertType<Container>(data);
         });
     });
+
+    describe('assertType<Container>', () => {
+        it('should throw the requested error for crap', () => {
+            const data = 42;
+            assert.throws(() => assertType<Container>(data, new Error('Test')), new Error('Test'));
+        });
+    });
 });
 
 describe('is', () => {
