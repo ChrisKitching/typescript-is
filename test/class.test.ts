@@ -56,7 +56,10 @@ describe('Checking class type', () => {
         try {
             assertType<AStreamObject>(wilderObject);
             assert.fail('Did not screech');
-        } catch (e) {}
+        } catch (e) {
+            if (e?.code === 'ERR_ASSERTION')
+                throw e;
+        }
     });
 
     it('should infer simple property types', () => {
@@ -67,6 +70,9 @@ describe('Checking class type', () => {
         try {
             assertType<ClassWithOtherEnum>(o);
             assert.fail('Did not screech');
-        } catch (e) {}
+        } catch (e) {
+            if (e?.code === 'ERR_ASSERTION')
+                throw e;
+        }
     });
 });
