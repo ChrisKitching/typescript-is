@@ -52,7 +52,7 @@ function is(obj, getErrorObject = defaultGetErrorObject) {
     return getErrorObject(obj);
 }
 
-function assertType(obj, err = new TypeGuardError("Type guard failure"), getErrorObject = defaultGetErrorObject) {
+function assertType(obj, err = new TypeGuardError(`Type guard failure: tried to assertType of ${JSON.stringify(obj)}`), getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
         throw err;
