@@ -34,11 +34,11 @@ enum MyEnum {
 }
 
 export class ClassWithEnum {
-    id = MyEnum.Test;
+    readonly id = MyEnum.Test;
 }
 
 export class ClassWithOtherEnum {
-    id = MyEnum.BadTest;
+    readonly id = MyEnum.BadTest;
 }
 
 describe('Checking class type', () => {
