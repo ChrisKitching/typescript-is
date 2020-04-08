@@ -53,9 +53,19 @@ function is(obj, getErrorObject = defaultGetErrorObject) {
 }
 
 function assertType(obj, err = new TypeGuardError(
-  `Type guard failure: tried to assertType of ${
-      JSON.stringify(obj, (key, value) => typeof value === 'bigint' ? value.toString() : value)}`),
+  {message:`Type guard failure: tried to assertType of ${
+      JSON.stringify(obj, (key, value) => typeof value === 'bigint' ? value.toString() : value)}`}),
       getErrorObject = defaultGetErrorObject) {
+    checkGetErrorObject(getErrorObject);
+    if (!getErrorObject(obj)) {
+        throw err;
+    }
+}
+
+function debugAssertType(obj, err = new TypeGuardError(
+  {message:`Type guard failure: tried to assertType of ${
+        JSON.stringify(obj, (key, value) => typeof value === 'bigint' ? value.toString() : value)}`}),
+                    getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
         throw err;
@@ -79,6 +89,7 @@ function setDefaultGetErrorObject(getErrorObject) {
 module.exports = {
     is,
     assertType,
+    debugAssertType,
     createIs,
     createAssertType,
     equals: is,

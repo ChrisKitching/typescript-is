@@ -109,11 +109,14 @@ export function transformNode(node: ts.Node, visitorContext: PartialVisitorConte
             const fnArgs = [...node.arguments];
 
             // Add the stupid default argument thing.
-            if ((name === 'assertType' || name === 'assertEquals') && fnArgs.length === 1) {
+            if ((name === 'debugAssertType' || name === 'assertType' || name === 'assertEquals') && fnArgs.length === 1) {
                 fnArgs.push(ts.createIdentifier('undefined'));
             }
 
             fnArgs.push(arrowFunction);
+
+            if(process.env.NODE_ENV === 'production' && name === 'debugAssertType')
+                return ts.createVoidZero();
 
             return ts.updateCall(
                 node,

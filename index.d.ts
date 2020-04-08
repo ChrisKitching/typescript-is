@@ -70,6 +70,19 @@ export function createEquals<T>(): (object: any) => object is T;
 export function assertType<T>(object: any, err?: Error): asserts object is T;
 
 /**
+ * Same as assertType<T>, however is deleted when run typescript-is transformer is run in a production environment.
+ *
+ * @param object object whose type will be asserted.
+ * @returns the given `object`, or an error is thrown if validation failed.
+ * @example
+ ```
+ const safeNumber = assertType<number>(42); // safeNumber === 42, code continues
+ assertType<number>('foo'); // throws an error
+ ```
+ */
+export function debugAssertType<T>(object: any, err?: Error): asserts object is T;
+
+/**
  * Creates a function similar to `assertType<T>` that can be invoked at a later point.
  *
  * This is useful, for example, if you want to re-use the function multiple times.
