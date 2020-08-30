@@ -50,7 +50,6 @@ describe('is', () => {
             assert.deepStrictEqual(is<{ optional?: boolean }>({ optional: 0 }), false);
             assert.deepStrictEqual(is<{ optional?: boolean }>({ optional: '' }), false);
             assert.deepStrictEqual(is<{ optional?: boolean }>({ optional: null }), false);
-            assert.deepStrictEqual(is<{ optional?: boolean }>({ optional: undefined }), false);
             assert.deepStrictEqual(is<{ optional?: boolean }>({ optional: {} }), false);
             assert.deepStrictEqual(is<{ optional?: boolean }>({ optional: [] }), false);
         });

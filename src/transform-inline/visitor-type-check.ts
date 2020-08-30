@@ -193,36 +193,39 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                     }
                     const functionName = visitType(propertyInfo.type!, visitorContext);
 
-                    const maybeNegate = (pred: boolean, x: any) => {
-                        if (pred) {
-                            return ts.createLogicalNot(x);
-                        } else {
-                            return x;
-                        }
-                    };
+                    // object["property"] ===/!== undefined
+                    const leftPart = ts.createBinary(
+                        ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name)),
+                        propertyInfo.optional ? ts.SyntaxKind.EqualsEqualsEqualsToken : ts.SyntaxKind.ExclamationEqualsEqualsToken,
+                        ts.createIdentifier('undefined')
+                    );
 
-                    // If it's optional, we do
-                    // `if ("foo" in object && !correctType(object["foo"]) { return false; }`
-                    // Otherwise,
-                    // `if (!(("foo" in object) && correctType(object["foo"])) { return false; }`
+                    // correctType(object["property"])
+                    const rightPart = ts.createCall(
+                        ts.createIdentifier(functionName),
+                        undefined,
+                        [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
+                    );
+
+                    let predicate;
+                    if (propertyInfo.optional) {
+                        // object["property"] === undefined || correctType(object["property"])
+                        predicate = ts.createBinary(
+                            leftPart,
+                            ts.SyntaxKind.BarBarToken,
+                            rightPart
+                        );
+                    } else {
+                        // object["property"] !== undefined && correctType(object["property"])
+                        predicate = ts.createBinary(
+                            leftPart,
+                            ts.SyntaxKind.AmpersandAmpersandToken,
+                            rightPart
+                        );
+                    }
+
                     return ts.createIf(
-                        maybeNegate(!propertyInfo.optional,
-                            ts.createBinary(
-                                ts.createBinary(
-                                    ts.createStringLiteral(propertyInfo.name),
-                                    ts.SyntaxKind.InKeyword,
-                                    VisitorUtils.objectIdentifier
-                                ),
-                                ts.SyntaxKind.AmpersandAmpersandToken,
-                                maybeNegate(propertyInfo.optional,
-                                    ts.createCall(
-                                        ts.createIdentifier(functionName),
-                                        undefined,
-                                        [ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name))]
-                                    )
-                                )
-                            )
-                        ),
+                        ts.createLogicalNot(predicate),
                         ts.createReturn(ts.createFalse())
                     );
                 }),
