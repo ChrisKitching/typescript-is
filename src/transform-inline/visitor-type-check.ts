@@ -87,8 +87,46 @@ function visitTupleObjectType(type: ts.TupleType, visitorContext: VisitorContext
     });
 }
 
-function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
+function visitNumberIndexedObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
     const name = VisitorTypeName.visitType(type, visitorContext, { type: 'type-check' });
+
+    // We assume here that there are only two types that will enter this function:
+    // Buffer and Array (including typed arrays like Int8Array etc.),
+    // so we make an exception for Buffer checking
+    // and check all arrays using default array checking method.
+    const typeName: ts.__String | undefined = type.getSymbol()?.getEscapedName();
+    if (typeName === undefined) {
+        throw new Error('Could not get a type name.');
+    }
+
+    let typeCheck: ts.IfStatement;
+    if (typeName === 'Array') {
+        typeCheck = ts.createIf(
+            ts.createLogicalNot(
+                ts.createCall(
+                    ts.createPropertyAccess(ts.createIdentifier('Array'), 'isArray'),
+                    undefined,
+                    [VisitorUtils.objectIdentifier]
+                )
+            ),
+            ts.createReturn(ts.createFalse()));
+    } else if (String(typeName).includes('Array')) {
+        // Typed arrays would type check between each other so we don't support them.
+        throw new Error('Typed arrays are not supported.');
+    } else if (typeName === 'Buffer') {
+        typeCheck = ts.createIf(
+            ts.createLogicalNot(
+                ts.createCall(
+                    ts.createPropertyAccess(ts.createIdentifier('Buffer'), 'isBuffer'),
+                    undefined,
+                    [VisitorUtils.objectIdentifier]
+                )
+            ),
+            ts.createReturn(ts.createFalse()));
+    } else {
+        throw new Error('Unsupported Number Indexed Object type. DataView?');
+    }
+
     return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
         const numberIndexType = visitorContext.checker.getIndexTypeOfType(type, ts.IndexKind.Number);
         if (numberIndexType === undefined) {
@@ -107,16 +145,7 @@ function visitArrayObjectType(type: ts.ObjectType, visitorContext: VisitorContex
             ],
             undefined,
             ts.createBlock([
-                ts.createIf(
-                    ts.createLogicalNot(
-                        ts.createCall(
-                            ts.createPropertyAccess(ts.createIdentifier('Array'), 'isArray'),
-                            undefined,
-                            [VisitorUtils.objectIdentifier]
-                        )
-                    ),
-                    ts.createReturn(ts.createFalse())
-                ),
+                typeCheck,
                 ts.createFor(
                     ts.createVariableDeclarationList(
                         [ts.createVariableDeclaration(indexIdentifier, undefined, ts.createNumericLiteral('0'))],
@@ -286,12 +315,13 @@ function visitTypeParameter(type: ts.Type, visitorContext: VisitorContext) {
 }
 
 function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
+
     if (tsutils.isTupleType(type)) {
         // Tuple with finite length.
         return visitTupleObjectType(type, visitorContext);
     } else if (visitorContext.checker.getIndexTypeOfType(type, ts.IndexKind.Number)) {
         // Index type is number -> array type.
-        return visitArrayObjectType(type, visitorContext);
+        return visitNumberIndexedObjectType(type, visitorContext);
     } else {
         // Also class should end up here
         // Index type is string -> regular object type.
