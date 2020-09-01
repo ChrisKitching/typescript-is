@@ -2,6 +2,11 @@ import { strict as assert } from 'assert';
 import { is, assertType } from '../index';
 
 
+function mkErr(): Error {
+    return new Error('Test');
+}
+
+
 interface TOrNull<T> {
     tOrNull: T | null;
 }
@@ -14,6 +19,11 @@ interface Container {
     numField: TOrNull<number>;
     strField?: TOrNull<StrContainer>;
 }
+
+interface WeirdContainer<T> {
+    field: T | undefined;
+}
+
 
 const validFieldValues = {
     numField: [
@@ -56,6 +66,21 @@ describe('assertType on complex things with Optional and Nullable fields', () =>
             });
         });
     });
+
+    // That's how typescripts validates these objects.
+    describe('assertType<Container with T | undefined>', () => {
+        it('should not throw on valid object with defined field', () => {
+            assertType<WeirdContainer<number>>({field: 42});
+        });
+
+        it('should not throw on valid objects with defined undefined field', () => {
+            assertType<WeirdContainer<number>>({field: undefined});
+        });
+
+        it('should throw on invalid objects', () => {
+            assert.throws(() => assertType<WeirdContainer<number>>({}, mkErr()), mkErr());
+        });
+    });
 });
 
 
@@ -65,6 +90,21 @@ describe('is on complex things with Optional and Nullable fields', () => {
             validContainerValues.forEach((element: any) => {
                 assert(is<Container>(element));
             });
+        });
+    });
+
+    // That's how typescripts validates these objects.
+    describe('is<Container with T | undefined>', () => {
+        it('should be truthy on valid object with defined field', () => {
+            assert(is<WeirdContainer<number>>({field: 42}));
+        });
+
+        it('should be truthy on valid object with defined undefined field', () => {
+            assert(is<WeirdContainer<number>>({field: undefined}));
+        });
+
+        it('should be falsy on invalid objects', () => {
+            assert(!is<WeirdContainer<number>>({}));
         });
     });
 });
