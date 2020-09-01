@@ -1,3 +1,5 @@
+const util = require("util");
+
 let defaultGetErrorObject = undefined;
 
 function checkGetErrorObject(getErrorObject) {
@@ -54,7 +56,7 @@ function is(obj, getErrorObject = defaultGetErrorObject) {
 
 function assertType(obj, err = new TypeGuardError(
   {message:`Type guard failure: tried to assertType of ${
-      JSON.stringify(obj, (key, value) => typeof value === 'bigint' ? value.toString() : value)}`}),
+      util.inspect(obj, {depth: 100, colors: true})}`}),
       getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
@@ -64,7 +66,7 @@ function assertType(obj, err = new TypeGuardError(
 
 function debugAssertType(obj, err = new TypeGuardError(
   {message:`Type guard failure: tried to assertType of ${
-        JSON.stringify(obj, (key, value) => typeof value === 'bigint' ? value.toString() : value)}`}),
+    util.inspect(obj, {depth: 100, colors: true})}}`}),
                     getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
