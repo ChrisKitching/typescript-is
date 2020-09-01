@@ -276,14 +276,14 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
 
                     let predicate;
                     if (propertyInfo.optional) {
-                        // object["property"] === undefined || correctType(object["property"])
+                        // leftPart || rightPart
                         predicate = ts.createBinary(
                             leftPart,
                             ts.SyntaxKind.BarBarToken,
                             rightPart
                         );
                     } else {
-                        // object["property"] !== undefined && correctType(object["property"])
+                        // leftPart && rightPart
                         predicate = ts.createBinary(
                             leftPart,
                             ts.SyntaxKind.AmpersandAmpersandToken,

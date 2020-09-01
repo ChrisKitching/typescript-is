@@ -79,3 +79,51 @@ describe('is<Buffer>', () => {
         assert(!is<Int8Array>(mkErr));
     });
 });
+
+
+type Wid = number;
+
+type Oid = number;
+
+type M = number;
+
+type Cid = number;
+
+interface W {
+    id: Wid;
+    o: Oid;
+    b: M;
+    c: Cid;
+    maxb: M;
+    minb: M;
+}
+
+interface CA {
+    id: number;
+    sid: number | undefined;
+    name: string;
+    w: W[];
+}
+
+
+describe('assertType', () => {
+    it('should not throw on valid checks', () => {
+        const data: CA = {
+            id: -1,
+            name: 'text',
+            sid: undefined,
+            w: [
+                {
+                    id: 1,
+                    b: 0,
+                    o: -1,
+                    c: 10,
+                    maxb: 9007199254740991,
+                    minb: 0
+                }
+            ]
+        };
+
+        assertType<CA>(data);
+    });
+});
