@@ -249,12 +249,23 @@ function visitRegularObjectType(type: ts.ObjectType, visitorContext: VisitorCont
                     }
                     const functionName = visitType(propertyInfo.type!, visitorContext);
 
-                    // object["property"] ===/!== undefined
-                    const leftPart = ts.createBinary(
-                        ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name)),
-                        propertyInfo.optional ? ts.SyntaxKind.EqualsEqualsEqualsToken : ts.SyntaxKind.ExclamationEqualsEqualsToken,
-                        ts.createIdentifier('undefined')
-                    );
+                    // if the property is optional:
+                    //   object["property"] === undefined
+                    // else:
+                    //   "property" in object
+                    let leftPart;
+                    if (propertyInfo.optional) {
+                        leftPart = ts.createStrictEquality(
+                            ts.createElementAccess(VisitorUtils.objectIdentifier, ts.createStringLiteral(propertyInfo.name)),
+                            ts.createIdentifier('undefined')
+                        );
+                    } else {
+                        leftPart = ts.createBinary(
+                            ts.createLiteral(propertyInfo.name),
+                            ts.SyntaxKind.InKeyword,
+                            VisitorUtils.objectIdentifier
+                        );
+                    }
 
                     // correctType(object["property"])
                     const rightPart = ts.createCall(
