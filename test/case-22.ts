@@ -13,7 +13,7 @@ describe('assertType<Buffer>', () => {
         assertType<Buffer>(Buffer.from([1, 2]));
     });
 
-    it('should not throw an error on invalid Buffers', () => {
+    it('should throw an error on invalid Buffers', () => {
         assert.throws(() => assertType<Buffer>({}, mkErr()), mkErr());
         assert.throws(() => assertType<Buffer>(null, mkErr()), mkErr());
         assert.throws(() => assertType<Buffer>(undefined, mkErr()), mkErr());

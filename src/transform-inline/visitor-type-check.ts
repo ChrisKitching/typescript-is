@@ -94,10 +94,12 @@ function visitNumberIndexedObjectType(type: ts.ObjectType, visitorContext: Visit
     // Buffer and Array (including typed arrays like Int8Array etc.),
     // so we make an exception for Buffer checking
     // and check all arrays using default array checking method.
-    const typeName: ts.__String | undefined = type.getSymbol()?.getEscapedName();
-    if (typeName === undefined) {
+    const typeNameRaw: ts.__String | undefined = type.getSymbol()?.getEscapedName();
+    if (typeNameRaw === undefined) {
         throw new Error('Could not get a type name.');
     }
+    const typeName = String(typeNameRaw);
+
 
     let typeCheck: ts.IfStatement;
     if (typeName === 'Array') {
@@ -110,9 +112,31 @@ function visitNumberIndexedObjectType(type: ts.ObjectType, visitorContext: Visit
                 )
             ),
             ts.createReturn(ts.createFalse()));
-    } else if (String(typeName).includes('Array')) {
-        // Typed arrays would type check between each other so we don't support them.
-        throw new Error('Typed arrays are not supported.');
+    } else if (typeName.includes('Array')) {
+        // Typed arrays would type check between each other,
+        // so we need an additional check on constructor names.
+        typeCheck = ts.createIf(
+            ts.createLogicalNot(
+                ts.createLogicalAnd(
+                    ts.createCall(
+                        ts.createPropertyAccess(ts.createIdentifier('ArrayBuffer'), 'isView'),
+                        undefined,
+                        [VisitorUtils.objectIdentifier]
+                    ),
+                    ts.createStrictEquality(
+                        ts.createPropertyAccess(
+                            ts.createIdentifier(typeName),
+                            'name'),
+                        ts.createPropertyAccess(
+                            ts.createPropertyAccess(
+                                VisitorUtils.objectIdentifier,
+                                'constructor'),
+                            'name'
+                        )
+                    )
+                )
+            ),
+            ts.createReturn(ts.createFalse()));
     } else if (typeName === 'Buffer') {
         typeCheck = ts.createIf(
             ts.createLogicalNot(
