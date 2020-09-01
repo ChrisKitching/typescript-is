@@ -29,6 +29,8 @@ describe('assertType<Typed Array>', () => {
         assert.throws(() => assertType<Int8Array>(new Int16Array(1), mkErr()), mkErr());
         assert.throws(() => assertType<Int8Array>(new Uint8Array(1), mkErr()), mkErr());
         assert.throws(() => assertType<Int8Array>(Buffer.alloc(1), mkErr()), mkErr());
+        assert.throws(() => assertType<Int8Array>(Array(1), mkErr()), mkErr());
+        assert.throws(() => assertType<Int8Array>(Array(1, 2, 3), mkErr()), mkErr());
 
         assert.throws(() => assertType<Int8Array>({}, mkErr()), mkErr());
         assert.throws(() => assertType<Int8Array>('text', mkErr()), mkErr());
@@ -56,12 +58,19 @@ describe('is<Buffer>', () => {
 
         assert(is<BigInt64Array>(new BigInt64Array(1)));
         assert(is<BigUint64Array>(new BigUint64Array(1)));
+
+        assert(is<Uint8Array>(new Uint8Array(0)));
+        assert(is<Uint8Array>(new Uint8Array(10)));
+        assert(is<Uint8Array>(Uint8Array.from([])));
+        assert(is<Uint8Array>(Uint8Array.from([1, 2, 3])));
     });
 
     it('should be falsy on invalid checks', () => {
         assert(!is<Int8Array>(new Int16Array(1)));
         assert(!is<Int8Array>(new Uint8Array(1)));
         assert(!is<Int8Array>(Buffer.alloc(1)));
+        assert(!is<Int8Array>(Array(1)));
+        assert(!is<Int8Array>(Array(1, 2, 3)));
 
         assert(!is<Int8Array>({}));
         assert(!is<Int8Array>('text'));

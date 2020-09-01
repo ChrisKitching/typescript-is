@@ -104,6 +104,7 @@ function visitNumberIndexedObjectType(type: ts.ObjectType, visitorContext: Visit
     let typeCheck: ts.IfStatement;
     if (typeName === 'Array') {
         typeCheck = ts.createIf(
+            // !Array.isArray(object) -> fail
             ts.createLogicalNot(
                 ts.createCall(
                     ts.createPropertyAccess(ts.createIdentifier('Array'), 'isArray'),
@@ -116,6 +117,7 @@ function visitNumberIndexedObjectType(type: ts.ObjectType, visitorContext: Visit
         // Typed arrays would type check between each other,
         // so we need an additional check on constructor names.
         typeCheck = ts.createIf(
+            // !(ArrayBuffer.isView(object) && typeName.name === object.constructor.name) -> fail
             ts.createLogicalNot(
                 ts.createLogicalAnd(
                     ts.createCall(
@@ -139,6 +141,7 @@ function visitNumberIndexedObjectType(type: ts.ObjectType, visitorContext: Visit
             ts.createReturn(ts.createFalse()));
     } else if (typeName === 'Buffer') {
         typeCheck = ts.createIf(
+            // !Buffer.isBuffer(object) -> fail
             ts.createLogicalNot(
                 ts.createCall(
                     ts.createPropertyAccess(ts.createIdentifier('Buffer'), 'isBuffer'),
