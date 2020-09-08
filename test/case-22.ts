@@ -14,12 +14,12 @@ describe('assertType<Buffer>', () => {
     });
 
     it('should throw an error on invalid Buffers', () => {
-        assert.throws(() => assertType<Buffer>({}, mkErr()), mkErr());
-        assert.throws(() => assertType<Buffer>(null, mkErr()), mkErr());
-        assert.throws(() => assertType<Buffer>(undefined, mkErr()), mkErr());
-        assert.throws(() => assertType<Buffer>(Array(10), mkErr()), mkErr());
-        assert.throws(() => assertType<Buffer>(new Int8Array(10), mkErr()), mkErr());
-        assert.throws(() => assertType<Buffer>(Int8Array.from([1, 2]), mkErr()), mkErr());
+        assert.throws(() => assertType<Buffer>({}, mkErr), mkErr());
+        assert.throws(() => assertType<Buffer>(null, mkErr), mkErr());
+        assert.throws(() => assertType<Buffer>(undefined, mkErr), mkErr());
+        assert.throws(() => assertType<Buffer>(Array(10), mkErr), mkErr());
+        assert.throws(() => assertType<Buffer>(new Int8Array(10), mkErr), mkErr());
+        assert.throws(() => assertType<Buffer>(Int8Array.from([1, 2]), mkErr), mkErr());
     });
 });
 

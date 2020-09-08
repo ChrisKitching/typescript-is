@@ -78,7 +78,7 @@ describe('assertType on complex things with Optional and Nullable fields', () =>
         });
 
         it('should throw on invalid objects', () => {
-            assert.throws(() => assertType<WeirdContainer<number>>({}, mkErr()), mkErr());
+            assert.throws(() => assertType<WeirdContainer<number>>({}, mkErr), mkErr());
         });
     });
 });

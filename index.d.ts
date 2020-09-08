@@ -67,7 +67,7 @@ export function createEquals<T>(): (object: any) => object is T;
    assertType<number>('foo'); // throws an error
    ```
  */
-export function assertType<T>(object: any, err?: Error): asserts object is T;
+export function assertType<T>(object: any, errorFactory?: (msg: string) => Error): asserts object is T;
 
 /**
  * Same as assertType<T>, however is deleted when run typescript-is transformer is run in a production environment.
@@ -80,7 +80,7 @@ export function assertType<T>(object: any, err?: Error): asserts object is T;
  assertType<number>('foo'); // throws an error
  ```
  */
-export function debugAssertType<T>(object: any, err?: Error): asserts object is T;
+export function debugAssertType<T>(object: any, errorFactory?: (msg: string) => Error): asserts object is T;
 
 /**
  * Creates a function similar to `assertType<T>` that can be invoked at a later point.

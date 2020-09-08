@@ -35,7 +35,7 @@ describe('assertType', () => {
     describe('assertType<Container>', () => {
         it('should throw the requested error for crap', () => {
             const data = 42;
-            assert.throws(() => assertType<Container>(data, new Error('Test')), new Error('Test'));
+            assert.throws(() => assertType<Container>(data, Error), new Error('Type guard failure: tried to assertType of \x1B[33m42\x1B[39m'));
         });
     });
 });

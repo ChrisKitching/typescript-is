@@ -26,17 +26,17 @@ describe('assertType<Typed Array>', () => {
     });
 
     it('should throw an error on invalid checks', () => {
-        assert.throws(() => assertType<Int8Array>(new Int16Array(1), mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>(new Uint8Array(1), mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>(Buffer.alloc(1), mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>(Array(1), mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>(Array(1, 2, 3), mkErr()), mkErr());
+        assert.throws(() => assertType<Int8Array>(new Int16Array(1), mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>(new Uint8Array(1), mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>(Buffer.alloc(1), mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>(Array(1), mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>(Array(1, 2, 3), mkErr), mkErr());
 
-        assert.throws(() => assertType<Int8Array>({}, mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>('text', mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>(42, mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>(mkErr(), mkErr()), mkErr());
-        assert.throws(() => assertType<Int8Array>(mkErr, mkErr()), mkErr());
+        assert.throws(() => assertType<Int8Array>({}, mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>('text', mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>(42, mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>(mkErr(), mkErr), mkErr());
+        assert.throws(() => assertType<Int8Array>(mkErr, mkErr), mkErr());
     });
 });
 

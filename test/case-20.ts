@@ -31,8 +31,8 @@ describe('assertType with Optional and Nullable fields', () => {
         });
 
         it('should throw an error on an invalid input', () => {
-            assert.throws(() => assertType<ContainerWithOptional<number>>({field: null}, mkErr()), mkErr());
-            assert.throws(() => assertType<ContainerWithOptional<number>>({field: 'text'}, mkErr()), mkErr());
+            assert.throws(() => assertType<ContainerWithOptional<number>>({field: null}, mkErr), mkErr());
+            assert.throws(() => assertType<ContainerWithOptional<number>>({field: 'text'}, mkErr), mkErr());
         });
     });
 
@@ -46,8 +46,8 @@ describe('assertType with Optional and Nullable fields', () => {
         });
 
         it('should throw an error on an invalid input', () => {
-            assert.throws(() => assertType<ContainerWithNullable<number>>({}, mkErr()), mkErr());
-            assert.throws(() => assertType<ContainerWithNullable<number>>({field: 'text'}, mkErr()), mkErr());
+            assert.throws(() => assertType<ContainerWithNullable<number>>({}, mkErr), mkErr());
+            assert.throws(() => assertType<ContainerWithNullable<number>>({field: 'text'}, mkErr), mkErr());
         });
     });
 
@@ -61,8 +61,8 @@ describe('assertType with Optional and Nullable fields', () => {
         });
 
         it('should throw an error on an invalid input', () => {
-            assert.throws(() => assertType<ContainerWithOptionalString>({field: null}, mkErr()), mkErr());
-            assert.throws(() => assertType<ContainerWithOptionalString>({field: 42}, mkErr()), mkErr());
+            assert.throws(() => assertType<ContainerWithOptionalString>({field: null}, mkErr), mkErr());
+            assert.throws(() => assertType<ContainerWithOptionalString>({field: 42}, mkErr), mkErr());
         });
     });
 
@@ -76,8 +76,8 @@ describe('assertType with Optional and Nullable fields', () => {
         });
 
         it('should throw an error on an invalid input', () => {
-            assert.throws(() => assertType<ContainerWithNullableString>({}, mkErr()), mkErr());
-            assert.throws(() => assertType<ContainerWithNullableString>({field: 42}, mkErr()), mkErr());
+            assert.throws(() => assertType<ContainerWithNullableString>({}, mkErr), mkErr());
+            assert.throws(() => assertType<ContainerWithNullableString>({field: 42}, mkErr), mkErr());
         });
     });
 
@@ -92,12 +92,12 @@ describe('assertType with Optional and Nullable fields', () => {
         });
 
         it('should throw an error on invalid input', () => {
-            assert.throws(() => assertType<string | undefined>(42, mkErr()), mkErr());
-            assert.throws(() => assertType<string | undefined>({}, mkErr()), mkErr());
-            assert.throws(() => assertType<string | undefined>(null, mkErr()), mkErr());
-            assert.throws(() => assertType<t>(42, mkErr()), mkErr());
-            assert.throws(() => assertType<t>({}, mkErr()), mkErr());
-            assert.throws(() => assertType<t>(null, mkErr()), mkErr());
+            assert.throws(() => assertType<string | undefined>(42, mkErr), mkErr());
+            assert.throws(() => assertType<string | undefined>({}, mkErr), mkErr());
+            assert.throws(() => assertType<string | undefined>(null, mkErr), mkErr());
+            assert.throws(() => assertType<t>(42, mkErr), mkErr());
+            assert.throws(() => assertType<t>({}, mkErr), mkErr());
+            assert.throws(() => assertType<t>(null, mkErr), mkErr());
         });
     });
 
@@ -112,12 +112,12 @@ describe('assertType with Optional and Nullable fields', () => {
         });
 
         it('should throw an error on invalid input', () => {
-            assert.throws(() => assertType<string | null>(42, mkErr()), mkErr());
-            assert.throws(() => assertType<string | null>({}, mkErr()), mkErr());
-            assert.throws(() => assertType<string | null>(undefined, mkErr()), mkErr());
-            assert.throws(() => assertType<t>(42, mkErr()), mkErr());
-            assert.throws(() => assertType<t>({}, mkErr()), mkErr());
-            assert.throws(() => assertType<t>(undefined, mkErr()), mkErr());
+            assert.throws(() => assertType<string | null>(42, mkErr), mkErr());
+            assert.throws(() => assertType<string | null>({}, mkErr), mkErr());
+            assert.throws(() => assertType<string | null>(undefined, mkErr), mkErr());
+            assert.throws(() => assertType<t>(42, mkErr), mkErr());
+            assert.throws(() => assertType<t>({}, mkErr), mkErr());
+            assert.throws(() => assertType<t>(undefined, mkErr), mkErr());
         });
     });
 });

@@ -11,11 +11,9 @@ function checkGetErrorObject(getErrorObject) {
 const assertionsMetadataKey = Symbol('assertions');
 
 class TypeGuardError extends Error {
-    constructor(errorObject) {
-        super(errorObject.message);
+    constructor(msg) {
+        super(msg);
         this.name = 'TypeGuardError';
-        this.path = errorObject.path;
-        this.reason = errorObject.reason;
     }
 }
 
@@ -54,23 +52,17 @@ function is(obj, getErrorObject = defaultGetErrorObject) {
     return getErrorObject(obj);
 }
 
-function assertType(obj, err = new TypeGuardError(
-  {message:`Type guard failure: tried to assertType of ${
-      util.inspect(obj, {depth: 100, colors: true})}`}),
-      getErrorObject = defaultGetErrorObject) {
+function assertType(obj, errorFactory = TypeGuardError, getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
-        throw err;
+        throw new errorFactory(`Type guard failure: tried to assertType of ${util.inspect(obj, {depth: 100, colors: true})}`);
     }
 }
 
-function debugAssertType(obj, err = new TypeGuardError(
-  {message:`Type guard failure: tried to assertType of ${
-    util.inspect(obj, {depth: 100, colors: true})}}`}),
-                    getErrorObject = defaultGetErrorObject) {
+function debugAssertType(obj, errorFactory = TypeGuardError, getErrorObject = defaultGetErrorObject) {
     checkGetErrorObject(getErrorObject);
     if (!getErrorObject(obj)) {
-        throw err;
+        throw new errorFactory(`Type guard failure: tried to assertType of ${util.inspect(obj, {depth: 100, colors: true})}`);
     }
 }
 
